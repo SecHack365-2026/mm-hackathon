@@ -6,34 +6,38 @@
 
 ```text
 mm-hackathon/
-├── README.md                   # リポジトリ全体ガイド
-├── .gitignore                  # Git管理除外設定
-└── docker/                     # Docker環境構築ディレクトリ
-    ├── Dockerfile              # Dockerビルド定義
-    ├── docker-entry-custom.sh  # セットアップスクリプト
-    └── src/                    # 処理用スクリプト群
-        ├── generate_mm_import.py  # ダミーデータ生成スクリプト
-        ├── get_token.sh           # 初期ユーザーのトークン取得スクリプト
-        └── stream_post.sh         # リアルタイム投稿用スクリプト
+├── README.md
+├── .gitignore
+├── Dockerfile
+├── docker-entry-custom.sh
+└── script/
+    ├── generate_mm_import.py
+    └── mm_data.db
 ```
+
+## Mattermostインポート元データ
+
+- Mattermostインポート元データは `script/mm_data.db` に格納します。
+- `script/generate_mm_import.py` は、既存の `script/mm_data.db` をそのまま読み込んでインポートZIPを作成します。
 
 ## 使い方
 
-### 1. イメージのビルド
-
-リポジトリのルートディレクトリ (`mm-hackathon/`) から以下を実行します。
+### 1. リポジトリ取得
 
 ```bash
-docker build -t mm-sh365fes:latest ./docker
+git clone <YOUR_REPOSITORY_URL>
+cd mm-hackathon
 ```
 
-※ `docker/` ディレクトリ内に移動してビルドする場合:
+### 2. イメージのビルド
+
+リポジトリのルートディレクトリから実行:
+
 ```bash
-cd docker
 docker build -t mm-sh365fes:latest .
 ```
 
-### 2. コンテナの起動
+### 3. コンテナの起動
 
 ```bash
 docker run -d \
@@ -42,33 +46,28 @@ docker run -d \
   mm-sh365fes:latest
 ```
 
-### 3. 環境へのアクセス
+### 4. 環境へのアクセス
 
-コンテナのログで緑色の `INITIAL SETUP FINISHED` が確認できたら、ブラウザからアクセスしてください。
+ログで `INITIAL SETUP FINISHED` が表示されたらブラウザからアクセスしてください。
 
 ```bash
 docker logs -f mm-sh365fes
 ```
 
-- **URL:** http://localhost:8065
-- **ユーザー名:** `user01`
-- **パスワード:** `SH365Fes`
+- URL: http://localhost:8065
+- ユーザー名: admin01
+- パスワード: SH365Fes
 
-## メンテナンス・削除
+## メンテナンス
 
-### コンテナの停止・削除（匿名ボリューム含む）
+### コンテナの停止・削除
 
 ```bash
 docker rm -vf mm-sh365fes
 ```
 
-### イメージの削除
+### イメージ削除
 
 ```bash
 docker rmi mm-sh365fes:latest
 ```
-
-## 開発メモ
-
-- 起動時の自動セットアップロジックは `docker/docker-entrypoint.sh` に記述します。
-- 処理用スクリプトの追加・修正は `docker/src/` 配下で行います。

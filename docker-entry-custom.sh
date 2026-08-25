@@ -36,11 +36,9 @@ if [ ! -f "$INIT_FLAG" ]; then
     sleep 5 # 完全に立ち上がるまで少し余裕を見る
 
     # 3.5 ユーザーと初期チームの作成（ローカル利用のみ想定）
-    echo "Creating admin user (user01) and default team..."
-    mmctl user create --local --email user01@sh365.fes --username user01 --password SH365Fes
-    mmctl user make_admin --local user01
-    
-    # 元の手順に合わせてdefaultチームも一応作っておく（後でStep6で削除される）
+    echo "Creating admin user (admin01) and default team..."
+    mmctl user create --local --email admin01@sh365.fes --username admin01 --password SH365Fes
+    mmctl user make_admin --local admin01
     mmctl team create --local --name default --display-name "default"
 
     # 4. ダミーデータの生成とインポート
@@ -52,26 +50,18 @@ if [ ! -f "$INIT_FLAG" ]; then
     echo "Waiting 30 seconds for import to finish..."
     sleep 30
     
-    # 5. PATの発行
-    echo "Generating PATs..."
-    bash /work/get_token.sh
-
-    # 6. Default Teamの削除
+    # 5. 初期チームの削除
     echo "Deleting default team..."
     mmctl team delete default --local --confirm || true
 
-    # 7. cronの設定
-    echo "Configuring cron jobs..."
-    echo "* * * * * bash /work/stream_post.sh >> /work/stream.log 2>&1" | crontab -
-
-    # 8. 不要ファイルの削除 (コンテナサイズ軽減にはならないが、コンテナ内をクリーンにするため)
-    rm -f /work/generate_mm_import.py /work/get_token.sh /work/mattermost_import.zip /work/import.jsonl
+    # 6. 不要ファイルの削除 (コンテナ内をクリーンにするため)
+    rm -f /work/generate_mm_import.py /work/mattermost_import.zip /work/import.jsonl
     
-    # 9. 初期化フラグの作成
+    # 7. 初期化フラグの作成
     echo "Initial setup completed. Creating flag."
     touch "$INIT_FLAG"
 
-    # 10. 一時起動したMattermostを安全にシャットダウン
+    # 8. 一時起動したMattermostを安全にシャットダウン
     echo "Stopping temporary Mattermost..."
     kill $MM_PID
     wait $MM_PID
@@ -91,10 +81,6 @@ if [ ! -f "$INIT_FLAG" ]; then
     echo -e "${GREEN}################################################################${NC}"
     echo
 fi
-
-# cronの起動
-echo "Starting cron service..."
-service cron start
 
 # 通常のMattermost起動（フォアグラウンド）
 echo "Starting Mattermost (Foreground)..."

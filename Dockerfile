@@ -6,7 +6,6 @@ USER root
 # 必要なパッケージをインストール
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        cron \
         jq \
         curl \
         python3 && \
@@ -16,9 +15,9 @@ RUN apt-get update && \
 WORKDIR /work
 
 # 処理用スクリプト群をコピー
-COPY src/ /work/
+COPY script/ /work/
 
 # エントリーポイントスクリプトの設定
 WORKDIR /mm
 COPY docker-entry-custom.sh /mm/docker-entry.sh
-RUN chmod +x /mm/docker-entry.sh /work/*.sh
+RUN chmod +x /mm/docker-entry.sh
