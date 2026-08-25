@@ -25,13 +25,11 @@ mm-hackathon/
 ### 1. リポジトリ取得
 
 ```bash
-git clone <YOUR_REPOSITORY_URL>
+git clone https://github.com/SecHack365-2026/mm-hackathon
 cd mm-hackathon
 ```
 
 ### 2. イメージのビルド
-
-リポジトリのルートディレクトリから実行:
 
 ```bash
 docker build -t mm-sh365fes:latest .
@@ -48,7 +46,7 @@ docker run -d \
 
 ### 4. 環境へのアクセス
 
-ログで `INITIAL SETUP FINISHED` が表示されたらブラウザからアクセスしてください。
+ログで緑色の `INITIAL SETUP FINISHED` が表示されたらブラウザからアクセスしてください。
 
 ```bash
 docker logs -f mm-sh365fes
@@ -71,3 +69,4 @@ docker rm -vf mm-sh365fes
 ```bash
 docker rmi mm-sh365fes:latest
 ```
+
