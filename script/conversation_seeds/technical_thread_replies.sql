@@ -13,7 +13,7 @@ VALUES
     ('tech_webhook_signature', 1, 4, 'user15', 8, 'parse前の本文でHMACを計算するよう、処理順を入れ替えましょう。'),
     ('tech_webhook_signature', 1, 5, 'user02', 12, '修正版では正しい要求だけが通り、本文を変えた要求は拒否されます。'),
     ('tech_webhook_signature', 1, 6, 'user15', 17, '署名の比較には、処理時間が入力に依存しない関数を使っています。'),
-    ('tech_webhook_signature', 1, 7, 'user02', 23, '生本文と検証結果を秘密値なしで記録し、この条件を回帰試験にします。'),
+    ('tech_webhook_signature', 1, 7, 'user02', 23, '切り分けの観点が助かりました。生本文と結果を秘密値なしで記録しますが、時刻境界のfixtureも一緒に残しますか？'),
 
     ('tech_retry_backoff', 1, 1, 'user28', 1, '現在の実装では失敗直後に三回続けて要求を送っています。'),
     ('tech_retry_backoff', 1, 2, 'user33', 3, '応答にRetry-Afterがある場合は、その秒数を最優先にしたいです。'),
@@ -21,7 +21,7 @@ VALUES
     ('tech_retry_backoff', 1, 4, 'user33', 8, '同時に再開しないよう、待機へ小さな揺らぎも加えます。'),
     ('tech_retry_backoff', 1, 5, 'user28', 12, '最大五回、待機上限三十秒の条件でfixtureを作りました。'),
     ('tech_retry_backoff', 1, 6, 'user33', 17, '四回目で成功し、各要求の間隔も指定どおりに延びています。'),
-    ('tech_retry_backoff', 1, 7, 'user28', 23, '最終失敗時は元のstatusを返すことも確認できたので、この条件で確定します。'),
+    ('tech_retry_backoff', 1, 7, 'user28', 23, '揺らぎを含む試験まで見てもらえて助かりました。元のstatusも返せているので、この条件で確定してよいでしょうか？'),
 
     ('tech_permission_scope', 1, 1, 'user07', 1, 'Botの処理一覧から、実際に呼ぶAPIを先に洗い出します。'),
     ('tech_permission_scope', 1, 2, 'user33', 3, '投稿作成とリアクション追加のほかは、チャンネル情報の参照だけでした。'),
@@ -29,7 +29,7 @@ VALUES
     ('tech_permission_scope', 1, 4, 'user33', 8, '通常のコマンドは成功し、管理APIへの要求は拒否されています。'),
     ('tech_permission_scope', 1, 5, 'user07', 12, '対象外チャンネルの履歴も取得できないことを確認しました。'),
     ('tech_permission_scope', 1, 6, 'user33', 17, '権限不足時のエラーはBot側で利用者向けの説明へ変換されています。'),
-    ('tech_permission_scope', 1, 7, 'user07', 23, '必要なscopeと確認手順を設定資料へ追加し、広いtokenは失効します。'),
+    ('tech_permission_scope', 1, 7, 'user07', 23, '拒否される操作まで一緒に確認できて安心しました。scopeを資料へ加えたら、広いtokenはその場で失効してよいですか？'),
 
     ('tech_event_dedup', 1, 1, 'user02', 1, '配信側は応答が遅いと同じイベントIDで再送する仕様です。'),
     ('tech_event_dedup', 1, 2, 'user33', 3, '本文の一致ではなく、イベントIDを一意制約へ使うのが安全です。'),
@@ -37,7 +37,7 @@ VALUES
     ('tech_event_dedup', 1, 4, 'user33', 8, 'IDのinsertに成功したworkerだけが後続処理へ進む形にしました。'),
     ('tech_event_dedup', 1, 5, 'user02', 12, '同じIDを十件並行送信しても、投稿は一件だけ作られています。'),
     ('tech_event_dedup', 1, 6, 'user33', 17, '処理失敗時は状態を失敗へ更新し、明示的な再実行だけ許可します。'),
-    ('tech_event_dedup', 1, 7, 'user02', 23, '成功、重複、失敗後再実行の三経路を試験へ固定します。'),
+    ('tech_event_dedup', 1, 7, 'user02', 23, '競合条件を整理してくれたおかげで試験を分けられました。成功、重複、失敗後再実行の三経路で十分そうですか？'),
 
     ('tech_payload_schema', 1, 1, 'user28', 1, '失敗したpayloadではactor項目がなく、代わりにsystemが入っています。'),
     ('tech_payload_schema', 1, 2, 'user20', 3, '共通structへ全項目を詰める設計では、この差を表現できません。'),
@@ -45,7 +45,7 @@ VALUES
     ('tech_payload_schema', 1, 4, 'user20', 8, '未知の種別は処理せず、種別名だけを警告ログへ残す形にします。'),
     ('tech_payload_schema', 1, 5, 'user28', 12, '四種類のfixtureで必須項目と省略項目を確認できました。'),
     ('tech_payload_schema', 1, 6, 'user20', 17, '既存種別の出力は変更前と同じで、互換性も保たれています。'),
-    ('tech_payload_schema', 1, 7, 'user28', 23, '新しい種別を足す手順をまとめ、schema追加時の試験漏れを防ぎます。'),
+    ('tech_payload_schema', 1, 7, 'user28', 23, '未知種別の扱いまで相談できて助かりました。追加手順をまとめますが、fixtureの必須項目も一覧にした方がよいですか？'),
 
     ('tech_standup_format', 1, 1, 'user15', 1, '今の出力は文章が連続し、誰の困りごとか判別しにくいです。'),
     ('tech_standup_format', 1, 2, 'user07', 3, '利用者名の見出しと三項目を固定順で出す案を作ります。'),
@@ -53,7 +53,7 @@ VALUES
     ('tech_standup_format', 1, 4, 'user07', 8, '空欄を「なし」と表示し、項目自体は省略しない形にしました。'),
     ('tech_standup_format', 1, 5, 'user15', 12, '三人分を並べても見出し単位で区切られ、読み飛ばしやすいです。'),
     ('tech_standup_format', 1, 6, 'user07', 17, '長文だけ最大文字数で切り、元投稿へのリンクを添えています。'),
-    ('tech_standup_format', 1, 7, 'user15', 23, '朝会用の例で確認できたので、この出力形式を採用します。'),
+    ('tech_standup_format', 1, 7, 'user15', 23, '実際の朝会例で見てもらえたので判断できました。この形式を採用し、長文だけ注意書きを添える形でどうでしょう？'),
 
     ('tech_mention_guard', 1, 1, 'user33', 1, '通常文にBot名を書いただけでも、文字列検索が一致しています。'),
     ('tech_mention_guard', 1, 2, 'user20', 3, 'コード例に含まれる名前まで起動対象になるのは避けたいです。'),
@@ -61,7 +61,7 @@ VALUES
     ('tech_mention_guard', 1, 4, 'user20', 8, 'mention IDがBotと一致する場合だけ処理を始めるよう変更しました。'),
     ('tech_mention_guard', 1, 5, 'user33', 12, '通常文とコード内の名前では沈黙し、明示mentionだけ応答します。'),
     ('tech_mention_guard', 1, 6, 'user20', 17, '編集でmentionが外れた場合も、新しい処理は起動しません。'),
-    ('tech_mention_guard', 1, 7, 'user33', 23, '三種類の入力を回帰試験へ残し、誤反応の修正を完了します。'),
+    ('tech_mention_guard', 1, 7, 'user33', 23, 'コード内の名前を候補に入れてくれたのが効きました。この三種類を回帰試験へ残して、修正完了としてよいですか？'),
 
     ('tech_rate_limit_demo', 1, 1, 'user28', 1, '一秒以内に十件送り、八件目から429になることを確認しました。'),
     ('tech_rate_limit_demo', 1, 2, 'user33', 3, '送信前に共通queueへ入れ、並列送信を止めるのがよさそうです。'),
@@ -69,7 +69,7 @@ VALUES
     ('tech_rate_limit_demo', 1, 4, 'user33', 8, '待機中の件数と最古の待ち時間をmetricへ追加しました。'),
     ('tech_rate_limit_demo', 1, 5, 'user28', 12, '同じ十件はすべて成功し、送信順序も変わっていません。'),
     ('tech_rate_limit_demo', 1, 6, 'user33', 17, 'queue上限を超えた場合は、受け付けず理由を返すようにします。'),
-    ('tech_rate_limit_demo', 1, 7, 'user28', 23, '成功、待機、上限超過を確認できたので負荷試験を保存します。'),
+    ('tech_rate_limit_demo', 1, 7, 'user28', 23, '上限超過まで一緒に追えたので助かりました。この負荷試験を保存しますが、警告値は運用側とも相談した方がよいですか？'),
 
     ('tech_summary_length', 1, 1, 'user15', 1, '現在の指示では短くすることだけを優先し、未決事項を落としています。'),
     ('tech_summary_length', 1, 2, 'user33', 3, '結論、根拠、未決事項を別項目で要求すると比較しやすいです。'),
@@ -77,7 +77,7 @@ VALUES
     ('tech_summary_length', 1, 4, 'user33', 8, '会議記録三件で新旧の出力を並べ、欠落を確認しました。'),
     ('tech_summary_length', 1, 5, 'user15', 12, '新しい出力は決定事項を保ち、長さも元文の四分の一程度です。'),
     ('tech_summary_length', 1, 6, 'user33', 17, '短い入力では見出しを増やさず、一文のまま返せています。'),
-    ('tech_summary_length', 1, 7, 'user15', 23, '長文と短文のfixtureを評価用に固定し、この条件で進めます。'),
+    ('tech_summary_length', 1, 7, 'user15', 23, '短文を強制整形しない案を出してもらえて自然になりました。このfixture群で進めますが、評価者をもう一人加えますか？'),
 
     ('tech_command_timeout', 1, 1, 'user02', 1, '外部集計APIの応答待ちに上限が設定されていません。'),
     ('tech_command_timeout', 1, 2, 'user07', 3, 'コマンド受付は先に返し、集計結果を後から投稿する形も検討できます。'),
@@ -85,7 +85,7 @@ VALUES
     ('tech_command_timeout', 1, 4, 'user07', 8, '処理contextへtimeoutを渡し、下流の要求も同時に止めました。'),
     ('tech_command_timeout', 1, 5, 'user02', 12, '十秒遅延する条件では、八秒後に案内が表示されています。'),
     ('tech_command_timeout', 1, 6, 'user07', 17, '中断後のgoroutineと接続が残らないことも確認できました。'),
-    ('tech_command_timeout', 1, 7, 'user02', 23, '正常完了とtimeoutの両経路を試験へ追加し、対応を閉じます。'),
+    ('tech_command_timeout', 1, 7, 'user02', 23, '中断後の子処理まで確認してくれて助かりました。正常完了とtimeoutを試験へ加え、この対応を閉じてよいでしょうか？'),
 
     ('tech_config_precedence', 1, 1, 'user13', 1, '環境変数に以前の値が残り、設定ファイルを上書きしています。'),
     ('tech_config_precedence', 1, 2, 'user15', 3, '値を表示すると秘密情報が混ざるため、設定元だけをログへ出しましょう。'),
@@ -93,7 +93,7 @@ VALUES
     ('tech_config_precedence', 1, 4, 'user15', 8, '問題の項目は環境変数由来と分かり、不要な定義を削除できました。'),
     ('tech_config_precedence', 1, 5, 'user13', 12, '削除後は設定ファイルの値を読み、他の項目には変化がありません。'),
     ('tech_config_precedence', 1, 6, 'user15', 17, '未定義時に既定値へ戻る経路も同じログで確認できます。'),
-    ('tech_config_precedence', 1, 7, 'user13', 23, '優先順位を手順へ明記し、環境差分の調査を再現可能にします。'),
+    ('tech_config_precedence', 1, 7, 'user13', 23, '設定値を出さずに調べる案が安全で助かりました。優先順位を手順へ明記しますが、起動引数の例も必要ですか？'),
 
     ('tech_healthcheck_startup', 1, 1, 'user28', 1, 'HTTP listenerの開始直後に、readyを返していることが分かりました。'),
     ('tech_healthcheck_startup', 1, 2, 'user02', 3, 'DB接続とmigration完了をreadinessの条件へ含めるべきです。'),
@@ -101,7 +101,7 @@ VALUES
     ('tech_healthcheck_startup', 1, 4, 'user02', 8, '準備状態を三段階で持ち、完了後だけreadinessを成功させました。'),
     ('tech_healthcheck_startup', 1, 5, 'user28', 12, '低速なDB接続でも準備中の要求は流れ込まず、起動後に成功します。'),
     ('tech_healthcheck_startup', 1, 6, 'user02', 17, 'DB切断時はreadinessだけ失敗し、process自体は維持されています。'),
-    ('tech_healthcheck_startup', 1, 7, 'user28', 23, '起動と切断の両条件を試験へ追加し、監視設定も合わせます。'),
+    ('tech_healthcheck_startup', 1, 7, 'user28', 23, 'readinessとlivenessを分けた理由が明確になりました。起動と切断の両試験を残し、監視設定も合わせてよいですか？'),
 
     ('tech_cache_invalidation', 1, 1, 'user02', 1, '更新処理の後に、一覧用cacheだけが残っている状態です。'),
     ('tech_cache_invalidation', 1, 2, 'user28', 3, '全cache削除では負荷が大きいため、対象利用者のkeyだけ消しましょう。'),
@@ -109,7 +109,7 @@ VALUES
     ('tech_cache_invalidation', 1, 4, 'user28', 8, '対象keyの算出を共通関数へまとめ、更新箇所の漏れを減らしました。'),
     ('tech_cache_invalidation', 1, 5, 'user02', 12, '更新直後は新しい一覧になり、別利用者のcache hitも保たれています。'),
     ('tech_cache_invalidation', 1, 6, 'user28', 17, '同時更新でも最後の値が残ることを並行試験で確認しました。'),
-    ('tech_cache_invalidation', 1, 7, 'user02', 23, '対象限定の削除で要件を満たしたため、この実装を採用します。'),
+    ('tech_cache_invalidation', 1, 7, 'user02', 23, '全件削除との比較まで確認してもらえて助かりました。対象限定の方式を採用し、同種の更新にも展開してよいでしょうか？'),
 
     ('tech_transaction_boundary', 1, 1, 'user15', 1, '本体だけcommitした後に関連登録が失敗する経路があります。'),
     ('tech_transaction_boundary', 1, 2, 'user02', 3, '二つのrepositoryへ同じtransactionを渡せる形へ変更しましょう。'),
@@ -117,7 +117,7 @@ VALUES
     ('tech_transaction_boundary', 1, 4, 'user02', 8, '関連登録を失敗させると、本体もrollbackされるようになりました。'),
     ('tech_transaction_boundary', 1, 5, 'user15', 12, '成功時だけ通知が一回送られ、rollback時には送られていません。'),
     ('tech_transaction_boundary', 1, 6, 'user02', 17, 'commit後の通知失敗は再送対象として別に記録しています。'),
-    ('tech_transaction_boundary', 1, 7, 'user15', 23, 'DB整合性と通知再送を分けて試験できたので、修正を確定します。'),
+    ('tech_transaction_boundary', 1, 7, 'user15', 23, '通知をcommit後へ出す案で迷いが解けました。DB整合性と再送を分けたこの試験で、修正を確定してよいですか？'),
 
     ('tech_timezone_display', 1, 1, 'user13', 1, '23時台の記録だけが、UTCの日付で切られていました。'),
     ('tech_timezone_display', 1, 2, 'user15', 3, '保存と並び順はUTCのままにし、表示時だけ変換するべきです。'),
@@ -125,7 +125,7 @@ VALUES
     ('tech_timezone_display', 1, 4, 'user15', 8, '日本時間では翌日、UTCでは前日の見出しになるfixtureを追加します。'),
     ('tech_timezone_display', 1, 5, 'user13', 12, '二つのtimezoneで期待する見出しになり、投稿順序も同じです。'),
     ('tech_timezone_display', 1, 6, 'user15', 17, '夏時間の切替があるtimezoneでも時刻の重複を処理できています。'),
-    ('tech_timezone_display', 1, 7, 'user13', 23, '変換責務を表示層へ限定し、境界日の試験を固定します。'),
+    ('tech_timezone_display', 1, 7, 'user13', 23, '保存値を触らない方針を確認できて安心しました。表示層へ限定し、境界日の試験を固定する形でどうでしょう？'),
 
     ('tech_sqlite_foreign_keys', 1, 1, 'user10', 1, 'SQLiteは接続単位で外部キー検査を有効にする必要があります。'),
     ('tech_sqlite_foreign_keys', 1, 2, 'user36', 3, '本番接続では設定済みですが、試験用接続だけ抜けていました。'),
@@ -133,7 +133,7 @@ VALUES
     ('tech_sqlite_foreign_keys', 1, 4, 'user36', 8, '親がない子をinsertすると、期待する制約エラーになりました。'),
     ('tech_sqlite_foreign_keys', 1, 5, 'user10', 12, '削除時のcascadeも有効になり、孤立行は残っていません。'),
     ('tech_sqlite_foreign_keys', 1, 6, 'user36', 17, 'foreign_key_checkの結果も空で、既存fixtureは正常です。'),
-    ('tech_sqlite_foreign_keys', 1, 7, 'user10', 23, '設定漏れを検出する接続試験を追加し、この問題を閉じます。'),
+    ('tech_sqlite_foreign_keys', 1, 7, 'user10', 23, '接続ごとの設定だと指摘してもらえて助かりました。設定漏れを検出する試験を加え、この問題を閉じてよいですか？'),
 
     ('tech_log_correlation', 1, 1, 'user23', 1, '入口のHTTP要求にはIDがありますが、queue投入時に失われています。'),
     ('tech_log_correlation', 1, 2, 'user15', 3, 'message metadataへ相関IDを入れ、workerまで渡す形にしましょう。'),
@@ -141,7 +141,7 @@ VALUES
     ('tech_log_correlation', 1, 4, 'user15', 8, 'HTTP、queue、DB更新の各ログに同じIDが記録されました。'),
     ('tech_log_correlation', 1, 5, 'user23', 12, '一つの失敗から前後の処理を検索でき、別要求とは混ざりません。'),
     ('tech_log_correlation', 1, 6, 'user15', 17, '利用者名やtokenをIDへ含めていないため、ログ共有も可能です。'),
-    ('tech_log_correlation', 1, 7, 'user23', 23, '引き継ぎ境界の試験を残し、調査手順にも検索例を追加します。'),
+    ('tech_log_correlation', 1, 7, 'user23', 23, '個人情報と分ける観点が助かりました。引き継ぎ境界の試験と検索例を残しますが、利用者向け表示も検討しますか？'),
 
     ('tech_flaky_test', 1, 1, 'user28', 1, '失敗時は非同期処理がまだ実行中で、結果だけ先に検証しています。'),
     ('tech_flaky_test', 1, 2, 'user10', 3, '固定sleepを延ばすのではなく、完了状態を待つ方が安定します。'),
@@ -149,7 +149,7 @@ VALUES
     ('tech_flaky_test', 1, 4, 'user10', 8, '失敗時には最後の状態と経過時間が出るため、原因も追えます。'),
     ('tech_flaky_test', 1, 5, 'user28', 12, '五十回連続で成功し、平均実行時間は以前より短くなりました。'),
     ('tech_flaky_test', 1, 6, 'user10', 17, '処理が完了しないfixtureでは、一秒で意図どおり失敗します。'),
-    ('tech_flaky_test', 1, 7, 'user28', 23, '成功とtimeoutを両方確認できたので、固定待機を削除します。'),
+    ('tech_flaky_test', 1, 7, 'user28', 23, '50回の実行まで付き合ってくれて助かりました。成功とtimeoutの両方を確認できたので、固定待機を削除してよいですか？'),
 
     ('tech_api_pagination', 1, 1, 'user02', 1, '境界の時刻を次の検索条件へ含めるため、最後の行が重複しています。'),
     ('tech_api_pagination', 1, 2, 'user23', 3, '同じ時刻の行もあるので、IDを第二sort keyに使う必要があります。'),
@@ -157,7 +157,7 @@ VALUES
     ('tech_api_pagination', 1, 4, 'user23', 8, '同時刻五件とページ境界を含むfixtureを用意しました。'),
     ('tech_api_pagination', 1, 5, 'user02', 12, '三ページを連結すると全IDが一度ずつ現れ、欠落もありません。'),
     ('tech_api_pagination', 1, 6, 'user23', 17, '不正cursorは400にして、最初のページへ黙って戻さない形にします。'),
-    ('tech_api_pagination', 1, 7, 'user02', 23, 'sort条件とcursor形式をAPI仕様へ記載し、修正を完了します。'),
+    ('tech_api_pagination', 1, 7, 'user02', 23, '同時刻の例を入れてくれたおかげで欠落も確認できました。sort条件とcursor形式を仕様へ記載してよいでしょうか？'),
 
     ('tech_graceful_shutdown', 1, 1, 'user15', 1, '終了シグナル受信後も、新しいジョブを受け付けていました。'),
     ('tech_graceful_shutdown', 1, 2, 'user02', 3, '先に受付を閉じ、実行中件数が零になるまで待つ順序にします。'),
@@ -165,7 +165,7 @@ VALUES
     ('tech_graceful_shutdown', 1, 4, 'user02', 8, '短いジョブは完了してから終了し、新規要求は拒否されています。'),
     ('tech_graceful_shutdown', 1, 5, 'user15', 12, '長いジョブは上限後にqueueへ戻り、次回起動で処理されました。'),
     ('tech_graceful_shutdown', 1, 6, 'user02', 17, '強制終了時にも二重実行にならないことをイベントIDで確認しています。'),
-    ('tech_graceful_shutdown', 1, 7, 'user15', 23, '終了時の三経路を試験へ加え、運用の停止時間も更新します。'),
+    ('tech_graceful_shutdown', 1, 7, 'user15', 23, '長いjobの扱いまで確認してくれて助かりました。終了時の三経路を試験へ加え、停止時間も更新する形でよいですか？'),
 
     ('tech_unread_jump', 1, 1, 'user23', 1, '低速条件では、未読位置取得より末尾描画が先に完了しています。'),
     ('tech_unread_jump', 1, 2, 'user36', 3, '末尾描画が既読位置を更新し、後から来た未読位置を無効にしています。'),
@@ -326,5 +326,108 @@ VALUES
     ('tech_release_notes', 1, 5, 'user14', 12, '変更点、影響、制約、問い合わせ先の順で読める内容になっています。'),
     ('tech_release_notes', 1, 6, 'user15', 17, '曖昧な改善表現を数値と具体的な操作へ置き換えました。'),
     ('tech_release_notes', 1, 7, 'user14', 23, '利用者向け文面として確定し、技術差分とは別に公開します。');
+
+INSERT INTO channel_conversation_thread_replies
+    (conversation_id, root_step_order, reply_order, username, offset_minutes, message)
+VALUES
+    ('tech_webhook_signature', 3, 1, 'user02', 2, '生本文を使う案に賛成です。送信側でも整形前のバイト列を保持できるので、同じfixtureで比較します。'),
+    ('tech_webhook_signature', 3, 2, 'user07', 5, '助かります。末尾の改行がある場合とない場合を分けると、差の原因を絞れそうです。'),
+    ('tech_webhook_signature', 3, 3, 'user02', 9, '二条件を追加しました。Content-Typeだけが異なる場合も同じ本文として検証してよいですか？'),
+    ('tech_webhook_signature', 3, 4, 'user07', 14, 'Content-Typeは署名対象外なので同じ結果で大丈夫です。その前提も試験名へ残しましょう。'),
+
+    ('tech_retry_backoff', 3, 1, 'user28', 2, 'Retry-Afterを優先する点は納得です。値が30秒を超えた場合だけ上限を適用する理解で合っていますか？'),
+    ('tech_retry_backoff', 3, 2, 'user20', 5, 'その理解です。上限で切ったことはログに残し、次の試行時刻も追えるようにします。'),
+    ('tech_retry_backoff', 3, 3, 'user28', 9, '分かりました。ヘッダーが不正な文字列の時は指数backoffへ戻すfixtureを足します。'),
+    ('tech_retry_backoff', 3, 4, 'user20', 14, '助かります。欠損、不正値、上限超過の三条件があれば判断経路を十分確認できます。'),
+
+    ('tech_permission_scope', 3, 1, 'user07', 2, '削除権限を外す案で進めたいです。既存tokenをそのまま縮小できるか、新規発行が必要か確認します。'),
+    ('tech_permission_scope', 3, 2, 'user15', 5, '新規発行の方が切替前後を比較しやすいと思います。通常操作を先に通してから旧tokenを止めませんか？'),
+    ('tech_permission_scope', 3, 3, 'user07', 9, 'その順なら切替失敗時も戻せますね。対象チャンネル外の閲覧拒否も確認項目へ足します。'),
+    ('tech_permission_scope', 3, 4, 'user15', 14, 'お願いします。通常操作と拒否操作を一組で記録すれば、最小権限の根拠にもできます。'),
+
+    ('tech_event_dedup', 3, 1, 'user02', 2, 'トランザクションへ入れる場合、イベント記録後に処理が失敗した時の再実行方法が気になります。'),
+    ('tech_event_dedup', 3, 2, 'user20', 5, '状態を処理中と完了に分け、失敗時だけ再実行可能へ戻すのはどうでしょう？'),
+    ('tech_event_dedup', 3, 3, 'user02', 9, 'よさそうです。処理中のままworkerが落ちた場合に回収する時刻も持たせます。'),
+    ('tech_event_dedup', 3, 4, 'user20', 14, '助かります。競合と異常終了を別fixtureにすれば、重複を防ぎつつ再実行も確認できます。'),
+
+    ('tech_payload_schema', 3, 1, 'user28', 2, '共通部分を先に検証する構成が読みやすそうです。未知の固有項目は許可する方針ですか？'),
+    ('tech_payload_schema', 3, 2, 'user07', 5, '互換性を優先して未知項目は許可し、必須項目の欠損だけをエラーにしたいです。'),
+    ('tech_payload_schema', 3, 3, 'user28', 9, '了解です。余分な項目を含むfixtureも追加して、将来の追加で壊れないことを見ます。'),
+    ('tech_payload_schema', 3, 4, 'user07', 14, 'その確認があると助かります。未知のイベント種別だけは理由を記録して無視する形に分けましょう。'),
+
+    ('tech_standup_format', 3, 1, 'user15', 2, '「なし」を残す案は比較しやすいですね。三項目すべて空の場合も三行を出しますか？'),
+    ('tech_standup_format', 3, 2, 'user33', 5, '入力漏れと本当に該当なしを区別したいので、未入力なら案内を返す方がよさそうです。'),
+    ('tech_standup_format', 3, 3, 'user15', 9, '確かに同じ表示だと判断できません。未入力時の案内文を短くして試してみます。'),
+    ('tech_standup_format', 3, 4, 'user33', 14, 'お願いします。一項目だけ「なし」の例も並べると、通常の見え方と比較できます。'),
+
+    ('tech_mention_guard', 3, 1, 'user33', 2, 'mention一覧を使えばコード内の名前を除外できますね。編集済み投稿のイベントでも同じ情報が来ますか？'),
+    ('tech_mention_guard', 3, 2, 'user07', 5, '編集イベントにも一覧はありますが、空の場合があるようです。fixtureで実際のpayloadを確認します。'),
+    ('tech_mention_guard', 3, 3, 'user33', 9, '助かります。空の場合に本文比較へ戻すと誤反応するので、起動しない方が安全だと思います。'),
+    ('tech_mention_guard', 3, 4, 'user07', 14, '同意です。通常投稿、編集投稿、明示mentionの三経路で判定を固定します。'),
+
+    ('tech_rate_limit_demo', 3, 1, 'user28', 2, '一つのqueueなら順序は守れそうです。処理が遅い一件で後続が止まる点は許容しますか？'),
+    ('tech_rate_limit_demo', 3, 2, 'user20', 5, '今回は投稿順を優先したいので許容します。ただし待機時間を測り、上限超過は通知したいです。'),
+    ('tech_rate_limit_demo', 3, 3, 'user28', 9, '判断理由が分かりました。遅い一件を混ぜた試験とqueue待ち時間の記録を追加します。'),
+    ('tech_rate_limit_demo', 3, 4, 'user20', 14, 'お願いします。その結果で、順序優先の設定を既定にするか改めて決めましょう。'),
+
+    ('tech_summary_length', 3, 1, 'user15', 2, '短文では枠を外す方が自然ですね。切替条件を文字数だけにするか、内容でも見るか迷います。'),
+    ('tech_summary_length', 3, 2, 'user07', 5, '文字数だけだと短い議論の未決事項を落としそうです。発言数との組み合わせはどうでしょう？'),
+    ('tech_summary_length', 3, 3, 'user15', 9, 'その観点が助かります。文字数と発言数の境界付近をfixtureにして出力を比べます。'),
+    ('tech_summary_length', 3, 4, 'user07', 14, 'お願いします。未決事項が一つある短文も入れると、枠を外す条件を判断しやすいです。'),
+
+    ('tech_command_timeout', 3, 1, 'user02', 2, '八秒の根拠を利用者側の待ち時間として説明できますか？ 外部処理の通常値も知りたいです。'),
+    ('tech_command_timeout', 3, 2, 'user33', 5, '通常は四秒以内で、過去のp95が六秒でした。余裕を二秒取り、八秒を候補にしています。'),
+    ('tech_command_timeout', 3, 3, 'user02', 9, '根拠が分かりました。中断後の子処理が残らないことも同じ試験で確認します。'),
+    ('tech_command_timeout', 3, 4, 'user33', 14, '助かります。表示だけ先に終わる状態を避けたいので、終了確認まで結果を共有してください。'),
+
+    ('tech_config_precedence', 3, 1, 'user13', 2, '設定元だけなら機密値を出さずに追えます。未設定時はdefaultと表示する形でよいですか？'),
+    ('tech_config_precedence', 3, 2, 'user02', 5, 'はい。file、environment、argument、defaultの四種類に限定すると検索もしやすそうです。'),
+    ('tech_config_precedence', 3, 3, 'user13', 9, 'その分類で実装します。複数指定された時は採用元だけでなく、上書きがあった事実も残しますか？'),
+    ('tech_config_precedence', 3, 4, 'user02', 14, '値なしで上書き元を並べられるなら残したいです。今回の環境差分も一行で追えるようになります。'),
+
+    ('tech_healthcheck_startup', 3, 1, 'user28', 2, 'readinessへDB疎通を入れる案に賛成です。外部APIまで含めると起動が不安定になりませんか？'),
+    ('tech_healthcheck_startup', 3, 2, 'user15', 5, '必須依存だけに絞りたいです。外部APIは劣化状態として別の監視へ出すのがよさそうです。'),
+    ('tech_healthcheck_startup', 3, 3, 'user28', 9, '整理ありがとうございます。DB切断時と外部API停止時を分けて再起動試験します。'),
+    ('tech_healthcheck_startup', 3, 4, 'user15', 14, 'お願いします。二つの結果が分かれれば、readinessの責務を手順にも説明できます。'),
+
+    ('tech_cache_invalidation', 3, 1, 'user02', 2, '対象キーだけ消す方針がよいと思います。複数一覧に同じ項目が出る場合の範囲は追えていますか？'),
+    ('tech_cache_invalidation', 3, 2, 'user13', 5, '利用者別とチーム別の二種類へ出るため、両方のキーを列挙する必要があります。'),
+    ('tech_cache_invalidation', 3, 3, 'user02', 9, '助かります。片方だけ消した時に古い値が残るfixtureも用意して確認します。'),
+    ('tech_cache_invalidation', 3, 4, 'user13', 14, 'お願いします。全件削除を避けつつ、二種類が同時に更新されることを見たいです。'),
+
+    ('tech_transaction_boundary', 3, 1, 'user15', 2, '通知をcommit後へ移す点は賛成です。送信失敗時に登録自体を戻さない理解で合っていますか？'),
+    ('tech_transaction_boundary', 3, 2, 'user28', 5, '合っています。登録は確定し、通知だけ再送queueへ入れる形にしたいです。'),
+    ('tech_transaction_boundary', 3, 3, 'user15', 9, 'その分離なら利用者の再登録も防げますね。通知失敗のfixtureを追加します。'),
+    ('tech_transaction_boundary', 3, 4, 'user28', 14, '助かります。DB失敗と通知失敗を別々に起こし、保存結果の違いを確認しましょう。'),
+
+    ('tech_timezone_display', 3, 1, 'user13', 2, '表示時だけ変換する方針でよいと思います。CSV出力は表示層に含める扱いでしょうか？'),
+    ('tech_timezone_display', 3, 2, 'user02', 5, '利用者が読む出力なので含めたいです。ただしAPIの生値はUTCのまま維持します。'),
+    ('tech_timezone_display', 3, 3, 'user13', 9, '境界が分かりました。画面、CSV、APIの三経路を同じ時刻で比較します。'),
+    ('tech_timezone_display', 3, 4, 'user02', 14, 'お願いします。日付だけでなく並び順が変わらないことも一緒に見てもらえると助かります。'),
+
+    ('tech_sqlite_foreign_keys', 3, 1, 'user10', 2, '接続直後の設定なら確実ですね。接続poolから取り出すたびに確認する必要はありますか？'),
+    ('tech_sqlite_foreign_keys', 3, 2, 'user15', 5, '新規接続の生成箇所で一度設定すれば十分です。pool再作成時も同じ初期化を通します。'),
+    ('tech_sqlite_foreign_keys', 3, 3, 'user10', 9, '了解です。再作成後の接続でも違反挿入が失敗する試験を加えます。'),
+    ('tech_sqlite_foreign_keys', 3, 4, 'user15', 14, '助かります。本番と試験で生成処理を共有できていることも、その試験で確認しましょう。'),
+
+    ('tech_log_correlation', 3, 1, 'user23', 2, '個人情報を含めない方針に賛成です。利用者へ問い合わせ番号として返す用途も考えますか？'),
+    ('tech_log_correlation', 3, 2, 'user02', 5, '調査は楽になりますが、内部の相関IDをそのまま見せるべきか迷います。別の短い番号も候補です。'),
+    ('tech_log_correlation', 3, 3, 'user23', 9, 'まず内部追跡だけ完成させ、表示用番号は要件を整理して別に判断するのが安全そうです。'),
+    ('tech_log_correlation', 3, 4, 'user02', 14, '切り分けありがとうございます。今回はヘッダー引き継ぎとログ検索の試験に範囲を絞ります。'),
+
+    ('tech_flaky_test', 3, 1, 'user28', 2, '状態待ちへ変える案がよさそうです。poll間隔を短くしすぎて負荷が増えないか気になります。'),
+    ('tech_flaky_test', 3, 2, 'user36', 5, '試験内だけ百ミリ秒間隔にし、上限を五秒にする案ではどうでしょう？'),
+    ('tech_flaky_test', 3, 3, 'user28', 9, '具体値があると助かります。その条件で50回実行し、時間と失敗数を比べます。'),
+    ('tech_flaky_test', 3, 4, 'user36', 14, 'お願いします。失敗時の最終状態も出せば、単なる時間不足か判別できます。'),
+
+    ('tech_api_pagination', 3, 1, 'user02', 2, '時刻とIDの組なら一意に進められますね。並び順は新しい順のままでよいですか？'),
+    ('tech_api_pagination', 3, 2, 'user15', 5, '画面仕様に合わせて新しい順を維持したいです。cursorには最後の時刻とIDを入れます。'),
+    ('tech_api_pagination', 3, 3, 'user02', 9, '了解です。同時刻のIDを境界の前後へ置き、重複と欠落を一度に確認します。'),
+    ('tech_api_pagination', 3, 4, 'user15', 14, '助かります。三ページを最後まで取得した件数も合わせると、条件を説明しやすいです。'),
+
+    ('tech_graceful_shutdown', 3, 1, 'user15', 2, '受付停止を先にする順序に賛成です。実行中jobの待機上限はどこで決めますか？'),
+    ('tech_graceful_shutdown', 3, 2, 'user28', 5, '運用の停止猶予が30秒なので、それを上限にし、超過分は再実行queueへ戻したいです。'),
+    ('tech_graceful_shutdown', 3, 3, 'user15', 9, '判断理由が分かりました。短いjobと上限超過jobを同時に流して順序を確認します。'),
+    ('tech_graceful_shutdown', 3, 4, 'user28', 14, 'お願いします。新規要求の拒否と既存jobの再投入が混ざらないことも見てください。');
 
 COMMIT;
