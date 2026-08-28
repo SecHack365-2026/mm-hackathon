@@ -243,6 +243,7 @@ END;
 
 DELETE FROM settings WHERE key IN ('base_ts', 'split_import_percent');
 INSERT OR REPLACE INTO settings(key, value_int) VALUES
+('anchor_ts', 1787907600000), -- 2026-08-28 18:00 JST
 ('history_days', 21),
 ('active_hour_start', 8),
 ('active_hour_end', 22),

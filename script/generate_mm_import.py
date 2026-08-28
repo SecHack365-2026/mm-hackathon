@@ -16,7 +16,6 @@ from datetime import datetime, time as dt_time, timedelta, timezone
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(OUT_DIR, "mm_data.db")
 ZIP_PATH = os.path.join(OUT_DIR, "mattermost_import.zip")
-TEMP_JSONL_PATH = os.path.join(OUT_DIR, "import.jsonl")
 JST = timezone(timedelta(hours=9))
 MENTION_PATTERN = re.compile(r"(?<![\w@])@([A-Za-z0-9_-]+)")
 SPECIAL_MENTIONS = {"all", "channel", "here"}
@@ -519,7 +518,10 @@ def generate_lines(
             }
         )
 
-    now = datetime.now(JST)
+    anchor_ts = settings.get("anchor_ts")
+    if anchor_ts is None:
+        raise RuntimeError("settings.anchor_ts is required for reproducible imports")
+    now = datetime.fromtimestamp(anchor_ts / 1000, JST)
     posts = build_regular_posts(
         team_name,
         channels,
@@ -575,15 +577,15 @@ def validate_lines(lines):
 
 
 def write_zip_only(lines):
-    with open(TEMP_JSONL_PATH, "w", encoding="utf-8") as file:
-        for obj in lines:
-            file.write(json.dumps(obj, ensure_ascii=False, separators=(", ", ": ")))
-            file.write("\n")
-
+    payload = "".join(
+        json.dumps(obj, ensure_ascii=False, separators=(", ", ": ")) + "\n"
+        for obj in lines
+    ).encode("utf-8")
+    zip_info = zipfile.ZipInfo("import.jsonl", date_time=(2026, 1, 1, 0, 0, 0))
+    zip_info.compress_type = zipfile.ZIP_DEFLATED
+    zip_info.external_attr = 0o644 << 16
     with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED) as zip_file:
-        zip_file.write(TEMP_JSONL_PATH, arcname="import.jsonl")
-
-    os.remove(TEMP_JSONL_PATH)
+        zip_file.writestr(zip_info, payload)
 
 
 def main():
