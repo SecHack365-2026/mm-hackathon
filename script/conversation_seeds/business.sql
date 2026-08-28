@@ -45,7 +45,7 @@ INSERT INTO channel_conversation_steps (
 ('biz_aurora_launch_decision', 1, 'project-aurora', 'user03', 9, 960, '@user14 リリース判定に必要な確認項目はすべて揃いましたか？'),
 ('biz_aurora_launch_decision', 2, 'project-aurora', 'user14', 9, 967, '性能試験と復旧手順は完了、問い合わせ導線だけ最終確認中です。'),
 ('biz_aurora_launch_decision', 3, 'project-aurora', 'user08', 9, 976, '問い合わせフォームから担当チャンネルまでの通知を確認しました。'),
-('biz_aurora_launch_decision', 4, 'project-aurora', 'user03', 9, 988, '懸念が解消したので、予定どおり明朝の公開で進めます。'),
+('biz_aurora_launch_decision', 4, 'project-aurora', 'user03', 9, 988, '問い合わせ導線の懸念も解消したので、予定どおり明朝の公開で進めたいです。ほかに気になる点はありますか？'),
 ('biz_aurora_launch_decision', 5, 'project-aurora', 'user14', 9, 999, '公開後30分は私が監視し、異常時は切り戻し判断を共有します。'),
 ('biz_aurora_launch_decision', 6, 'project-aurora', 'user08', 9, 1013, '公開直後の不安を早く拾えるよう、サポート側も監視担当と同じ時間帯で待機します。案内文は予約済みですが、切り戻した場合の文面だけ未確定です。判断条件が固まったら、その場合の案内も一緒に確認させてください。'),
 
@@ -68,7 +68,7 @@ INSERT INTO channel_conversation_steps (
 ('biz_phoenix_api_contract', 2, 'project-phoenix', 'user28', 14, 643, '追加項目なので既存表示には影響しません。新しい状態表示で利用します。'),
 ('biz_phoenix_api_contract', 3, 'project-phoenix', 'user33', 14, 652, '未設定時は空文字ではなく項目自体が省略される理解で合っていますか？'),
 ('biz_phoenix_api_contract', 4, 'project-phoenix', 'user06', 14, 664, '@user33 はい。仕様書にも省略可能と追記しました。'),
-('biz_phoenix_api_contract', 5, 'project-phoenix', 'user28', 14, 677, '画面側で両方の応答を確認し、問題なく表示できました。'),
+('biz_phoenix_api_contract', 5, 'project-phoenix', 'user28', 14, 677, '画面側で両方の応答を確認し、問題なく表示できました。利用側でほかに見ておきたい条件はありますか？'),
 ('biz_phoenix_api_contract', 6, 'project-phoenix', 'user06', 14, 691, '未設定時の扱いを具体的に聞いてもらえたおかげで、画面とAPIの解釈を揃えられました。契約試験にも省略例を追加しています。次の版へ含める前に、ほかの利用側で空文字を前提にしていないかだけ確認しましょう。'),
 
 ('biz_phoenix_incident_drill', 1, 'project-phoenix', 'user19', 11, 870, '@user37 障害対応訓練の開始条件を確認してもらえますか？'),
@@ -104,7 +104,7 @@ INSERT INTO channel_conversation_steps (
 ('biz_sales_security_answers', 2, 'sales-deals', 'user36', 13, 803, '認証と監査記録は回答済みで、データ保管期間だけ確認中です。'),
 ('biz_sales_security_answers', 3, 'sales-deals', 'user24', 13, 812, '保管期間は契約終了後の削除手順と合わせて説明した方がよさそうです。'),
 ('biz_sales_security_answers', 4, 'sales-deals', 'user36', 13, 825, '@user24 運用担当と確認し、標準期間と削除申請の流れを追記しました。'),
-('biz_sales_security_answers', 5, 'sales-deals', 'user13', 13, 838, '回答を確認しました。断定できない項目も条件が明記されています。'),
+('biz_sales_security_answers', 5, 'sales-deals', 'user13', 13, 838, '回答を確認しました。断定できない項目にも条件が明記されていて、先方へ誤解なく伝えられそうです。'),
 ('biz_sales_security_answers', 6, 'sales-deals', 'user36', 13, 852, '確認中の項目を曖昧に断定しないよう、標準条件と個別相談の範囲を分けて最終版にまとめました。明日の午前中に回答できます。営業側で先方の質問意図とずれていないか、送付前に一度だけ目を通してもらえると助かります。'),
 
 ('biz_sales_trial_followup', 1, 'sales-deals', 'user20', 10, 645, '@user04 試用一週目の反応、次回の確認事項を相談させてください。'),
@@ -183,7 +183,7 @@ INSERT INTO channel_conversation_steps (
 ('biz_design_confirmation', 2, 'design-review', 'user05', 8, 698, '誤操作を防ぐため、対象名と影響件数の両方を表示したいです。'),
 ('biz_design_confirmation', 3, 'design-review', 'user18', 8, 707, '件数の取得に時間がかかる場合の表示も決めておきましょう。'),
 ('biz_design_confirmation', 4, 'design-review', 'user31', 8, 719, '取得中は削除ボタンを無効にし、完了後に押せるようにしました。'),
-('biz_design_confirmation', 5, 'design-review', 'user05', 8, 732, '待っている理由が分かる説明も追加してください。'),
+('biz_design_confirmation', 5, 'design-review', 'user05', 8, 732, '処理が止まったと感じないよう、待っている理由が分かる短い説明も追加できそうでしょうか。'),
 ('biz_design_confirmation', 6, 'design-review', 'user31', 8, 746, '処理が止まったように見えないよう、件数を取得している理由を短く加えました。失敗時は削除へ進まず再取得できる構成です。待機が長い場合にも利用者が判断できるよう、一定時間後の案内が必要か確認してもらえますか。'),
 
 ('biz_design_mobile_navigation', 1, 'design-review', 'user38', 4, 880, '@user27 モバイルの下部メニュー、項目を四つに減らした案です。'),
@@ -248,7 +248,7 @@ INSERT INTO channel_conversation_steps (
 ('biz_procurement_delivery', 2, 'procurement', 'user21', 3, 908, '私が数量と外観を確認し、技術確認は担当チームへお願いします。'),
 ('biz_procurement_delivery', 3, 'procurement', 'user34', 3, 917, '到着予定は午後です。保管場所を午前中に空けておきます。'),
 ('biz_procurement_delivery', 4, 'procurement', 'user17', 3, 929, '納品書と注文内容を照合する表を用意しました。'),
-('biz_procurement_delivery', 5, 'procurement', 'user21', 3, 942, '不足や破損があれば写真ではなく管理番号と状態を記録します。'),
+('biz_procurement_delivery', 5, 'procurement', 'user21', 3, 942, '後から確認しやすいよう、不足や破損があれば管理番号と状態を記録する形でよいでしょうか。'),
 ('biz_procurement_delivery', 6, 'procurement', 'user34', 3, 956, '検品担当が迷わないよう、受け取り場所と注文一覧を共有しました。到着後は数量確認が終わった時点でここへ連絡します。技術確認に時間がかかる場合は、未確認の機材だけ分けて保管する進め方で問題ないでしょうか。'),
 
 -- Announcements coordination

@@ -204,7 +204,7 @@ VALUES
     ('tech_search_stale', 1, 3, 'user10', 5, '投稿IDと失敗理由をqueueへ戻し、上限付きで再試行しましょう。'),
     ('tech_search_stale', 1, 4, 'user36', 8, '対象投稿を再投入すると、新しい本文でindexが更新されました。'),
     ('tech_search_stale', 1, 5, 'user10', 12, '古い語では該当せず、新しい語だけで検索結果へ現れます。'),
-    ('tech_search_stale', 1, 6, 'user36', 17, '再試行上限を超えた投稿は監視通知へ回すようにしました。'),
+    ('tech_search_stale', 1, 6, 'user36', 17, '見落としを避けるため、再試行上限を超えた投稿は監視通知へ回すようにしました。'),
     ('tech_search_stale', 1, 7, 'user10', 23, '失敗fixtureを保存し、index更新の回帰試験として使います。'),
 
     ('tech_api_latency', 1, 1, 'user36', 1, '書き込み先DBの待機が増え、接続取得に時間を使っています。'),
@@ -212,7 +212,7 @@ VALUES
     ('tech_api_latency', 1, 3, 'user36', 5, '集計jobを止め、利用者向け書き込みを優先させましょう。'),
     ('tech_api_latency', 1, 4, 'user02', 8, '停止後に接続待ちが減り、p95も下がり始めました。'),
     ('tech_api_latency', 1, 5, 'user36', 12, '五分間通常値を維持し、エラー率も増えていません。'),
-    ('tech_api_latency', 1, 6, 'user02', 17, '集計queryは対象期間を分割し、読み取り専用接続へ移します。'),
+    ('tech_api_latency', 1, 6, 'user02', 17, '利用者向け処理への影響を抑えるため、集計queryは期間を分割して読み取り専用接続へ移します。'),
     ('tech_api_latency', 1, 7, 'user36', 23, '暫定復旧と恒久対応を分けて記録し、障害対応を終了します。'),
 
     ('tech_queue_backlog', 1, 1, 'user23', 1, '先頭の一件が毎回失敗し、同じworkerへ戻り続けています。'),
@@ -251,7 +251,7 @@ VALUES
     ('tech_token_exposure', 1, 2, 'user28', 3, '値をmaskするより、機密header自体をloggerへ渡さない方が安全です。'),
     ('tech_token_exposure', 1, 3, 'user10', 5, '共通filterでauthorizationとcookieを除外するよう変更しました。'),
     ('tech_token_exposure', 1, 4, 'user28', 8, '成功と失敗のログを確認し、どちらにも値は含まれていません。'),
-    ('tech_token_exposure', 1, 5, 'user10', 12, '影響期間のログを限定し、該当tokenをすべて失効しました。'),
+    ('tech_token_exposure', 1, 5, 'user10', 12, '念のため影響期間のログを限定して確認し、該当tokenをすべて失効しました。'),
     ('tech_token_exposure', 1, 6, 'user28', 17, '機密headerをfixtureへ入れ、出力されないことを自動試験にします。'),
     ('tech_token_exposure', 1, 7, 'user10', 23, '再発防止と失効確認が終わったため、この対応を完了します。'),
 
@@ -292,7 +292,7 @@ VALUES
     ('tech_staging_smoke', 1, 3, 'user02', 5, 'ログインと投稿は成功し、検索にも新しい投稿が現れました。'),
     ('tech_staging_smoke', 1, 4, 'user15', 8, '通知設定を変更して再読み込みしても、選択した値が維持されています。'),
     ('tech_staging_smoke', 1, 5, 'user02', 12, '四操作の間に新しいerror logは記録されていません。'),
-    ('tech_staging_smoke', 1, 6, 'user15', 17, '前版との画面差分も今回の変更範囲だけでした。'),
+    ('tech_staging_smoke', 1, 6, 'user15', 17, '前版との画面差分も今回の変更範囲だけでした。この結果なら本番判断へ進めそうですか？'),
     ('tech_staging_smoke', 1, 7, 'user02', 23, '結果をリリース記録へ添付し、本番反映可能として返します。'),
 
     ('tech_rollback_drill', 1, 1, 'user15', 1, '一つ前のimageと現在のDBを組み合わせて切り戻します。'),
@@ -308,7 +308,7 @@ VALUES
     ('tech_migration_order', 1, 3, 'user28', 5, '新版は列の存在を前提にするので、アプリ先行は避けるべきです。'),
     ('tech_migration_order', 1, 4, 'user15', 8, '旧版と新DB、新版と新DBの二組で結合試験を行いました。'),
     ('tech_migration_order', 1, 5, 'user28', 12, '二組とも成功し、旧DBと新版の組だけは起動前検査で止まります。'),
-    ('tech_migration_order', 1, 6, 'user15', 17, '確認queryを手順へ入れれば、順序違反を反映前に検出できます。'),
+    ('tech_migration_order', 1, 6, 'user15', 17, '確認queryを手順へ入れれば、担当者が変わっても順序違反を反映前に検出できそうです。'),
     ('tech_migration_order', 1, 7, 'user28', 23, 'DB更新、確認、アプリ更新の順でリリース手順を固定します。'),
 
     ('tech_canary_metrics', 1, 1, 'user23', 1, 'canaryは全体の一割へ反映され、要求数はまだ三十件です。'),

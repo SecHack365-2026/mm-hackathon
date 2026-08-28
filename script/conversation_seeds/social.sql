@@ -18,7 +18,7 @@ INSERT INTO channel_conversation_steps(
 ('social_town_lost_umbrella', 1, 'town-square', 'user12', 5, 1020, '共有スペースに紺色の折り畳み傘を忘れたかもしれません。'),
 ('social_town_lost_umbrella', 2, 'town-square', 'user31', 5, 1024, '@user12 木の持ち手で、小さな白い印が付いた傘ですか？'),
 ('social_town_lost_umbrella', 3, 'town-square', 'user12', 5, 1027, 'それです。見つけてくれてありがとうございます。'),
-('social_town_lost_umbrella', 4, 'town-square', 'user31', 5, 1031, '受付横の傘立てへ移しておきました。'),
+('social_town_lost_umbrella', 4, 'town-square', 'user31', 5, 1031, '雨に間に合ってよかったです。受付横の傘立てへ移しておきました。'),
 ('social_town_lost_umbrella', 5, 'town-square', 'user08', 5, 1035, '似た傘が多いので、目印があると助かりますね。'),
 ('social_town_lost_umbrella', 6, 'town-square', 'user12', 5, 1039, '見つかってほっとしました。今度から明るい色のバンドも付けておきます。'),
 
@@ -60,7 +60,7 @@ INSERT INTO channel_conversation_steps(
 
 ('social_break_stretch', 1, 'break-room', 'user25', 9, 900, '@user07 肩まわりの短いストレッチ、前に教えていたものをもう一度やりませんか？ 午前中に画面を見続けていたせいか、肩が上がったままになっている感じがします。休憩室で三分ほど、椅子に座ったままできて、特別な道具を使わない内容だと参加しやすそうです。痛みがある人は見学だけでもよいことと、無理に首を回さないことも最初に伝えたいです。動きが難しければ、途中で止めて声をかけてください。'),
 ('social_break_stretch', 2, 'break-room', 'user07', 9, 904, 'いいですね。椅子に座ったままできる動きにしましょう。'),
-('social_break_stretch', 3, 'break-room', 'user13', 9, 908, '三分くらいなら参加したいです。'),
+('social_break_stretch', 3, 'break-room', 'user13', 9, 908, '三分くらいなら参加したいです。少し肩が軽くなるとうれしいです。'),
 ('social_break_stretch', 4, 'break-room', 'user07', 9, 912, 'では肩を上げ下げしてから、首をゆっくり傾けます。'),
 ('social_break_stretch', 5, 'break-room', 'user25', 9, 916, '痛みが出ない範囲で十分ですよ。'),
 ('social_break_stretch', 6, 'break-room', 'user13', 9, 920, '少し軽くなりました。午後も姿勢に気を付けます。'),
@@ -91,7 +91,7 @@ INSERT INTO channel_conversation_steps(
 ('social_late_rain_sound', 2, 'late-night-talk', 'user08', 7, 1374, '@user34 あと十分だけ整理して終わる予定です。'),
 ('social_late_rain_sound', 3, 'late-night-talk', 'user34', 7, 1378, '帰り道が心配なので、強くなる前に区切りましょう。'),
 ('social_late_rain_sound', 4, 'late-night-talk', 'user08', 7, 1382, 'いま保存しました。少し名残惜しいですが、明日のTODOも二つ残せたので安心して終われます。'),
-('social_late_rain_sound', 5, 'late-night-talk', 'user40', 7, 1386, '共有の大きい傘が入口に一本あります。'),
+('social_late_rain_sound', 5, 'late-night-talk', 'user40', 7, 1386, '帰りが心配な方へ、共有の大きい傘が入口に一本あります。'),
 ('social_late_rain_sound', 6, 'late-night-talk', 'user34', 7, 1390, '情報ありがとうございます。必要なら借ります。'),
 
 ('social_late_bookmark', 1, 'late-night-talk', 'user16', 12, 1295, '@user29 調べ物の途中ですが、参考ページが増えすぎました。'),
@@ -148,7 +148,7 @@ INSERT INTO channel_conversation_steps(
 ('social_event_photo_walk', 1, 'office-events', 'user11', 5, 735, '昼休みに建物の周りを撮る小さな写真散歩を考えています。高価なカメラを使う会ではなく、スマートフォンで光や形を一つ見つけ、十五分ほどで入口へ戻る気軽な企画です。人の顔や車の番号が写った写真は共有せず、撮影してよい場所だけを歩きます。暑さや雨が気になる場合は室内へ切り替えるので、参加条件について希望があれば教えてください。撮った写真を見せるかどうかも、それぞれの自由にします。'),
 ('social_event_photo_walk', 2, 'office-events', 'user26', 5, 739, '@user11 スマートフォンだけでも参加できますか？'),
 ('social_event_photo_walk', 3, 'office-events', 'user11', 5, 743, 'もちろんです。道具より、気になった景色を見つける会です。'),
-('social_event_photo_walk', 4, 'office-events', 'user36', 5, 747, '日陰の多い短い経路なら参加したいです。'),
+('social_event_photo_walk', 4, 'office-events', 'user36', 5, 747, '暑さが少し心配なので、日陰の多い短い経路なら参加したいです。'),
 ('social_event_photo_walk', 5, 'office-events', 'user11', 5, 751, '十五分で戻れる経路を地図にしておきます。'),
 ('social_event_photo_walk', 6, 'office-events', 'user26', 5, 755, 'それなら気軽ですね。昼食後に入口へ行きます。'),
 
@@ -234,7 +234,7 @@ INSERT INTO channel_conversation_steps(
 ('social_weekend_plants', 1, 'weekend-club', 'user05', 16, 610, '小さな鉢植えの植え替えをしようと思っています。'),
 ('social_weekend_plants', 2, 'weekend-club', 'user25', 16, 614, '@user05 余っている土があるので、少し持っていけます。'),
 ('social_weekend_plants', 3, 'weekend-club', 'user05', 16, 618, '助かります。直径十センチの鉢一つ分で十分です。'),
-('social_weekend_plants', 4, 'weekend-club', 'user14', 16, 622, '底に敷く小石も少し余っています。'),
+('social_weekend_plants', 4, 'weekend-club', 'user14', 16, 622, '底に敷く小石も少し余っています。よければ一緒に持っていきましょうか？'),
 ('social_weekend_plants', 5, 'weekend-club', 'user05', 16, 626, '@user14 ぜひお願いします。受け皿はこちらで用意します。'),
 ('social_weekend_plants', 6, 'weekend-club', 'user25', 16, 630, '必要な量が分かって安心しました。重くならないよう、土と小石は小さな袋へ分けておきます。'),
 

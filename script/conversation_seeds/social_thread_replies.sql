@@ -13,7 +13,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_town_lunch_map', 1, 3, 'user18', 9, '香りはありますが、辛さはかなり穏やかでした。'),
 ('social_town_lunch_map', 1, 4, 'user12', 14, 'ご飯の量を少なめにもできるそうです。'),
 ('social_town_lunch_map', 1, 5, 'user27', 20, 'それなら今日はカレーにしてみます。'),
-('social_town_lunch_map', 1, 6, 'user12', 27, '混む前に私も向かいます。'),
+('social_town_lunch_map', 1, 6, 'user12', 27, '一緒なら心強いので、混む前に私も向かいます。'),
 ('social_town_lunch_map', 1, 7, 'user18', 35, '売り切れ表示はまだ出ていませんでした。'),
 
 ('social_town_lost_umbrella', 1, 1, 'user31', 2, '傘立ての近くを確認してみます。'),
@@ -60,7 +60,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_break_fridge_label', 1, 1, 'user11', 2, '緑のふたなら私が昨日入れたものです。'),
 ('social_break_fridge_label', 1, 2, 'user33', 5, '同じ形の容器が多いので迷いますね。'),
 ('social_break_fridge_label', 1, 3, 'user06', 9, '付箋とペンを横に置くのはどうでしょう。'),
-('social_break_fridge_label', 1, 4, 'user11', 14, '今日中に持ち帰る予定です。'),
+('social_break_fridge_label', 1, 4, 'user11', 14, '忘れないよう、今日中に持ち帰る予定です。'),
 ('social_break_fridge_label', 1, 5, 'user33', 20, '油性ペンを一本補充しておきました。'),
 ('social_break_fridge_label', 1, 6, 'user06', 27, '日付も書くと整理しやすそうです。'),
 ('social_break_fridge_label', 1, 7, 'user11', 35, '次は迷わせないよう、名前と日付を大きめに書いた札を付けました。'),
@@ -81,7 +81,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_break_tea_choice', 1, 6, 'user09', 27, 'ふたに一杯分の目安が貼ってあります。'),
 ('social_break_tea_choice', 1, 7, 'user17', 35, '朝は紅茶と迷いましたが、香りが穏やかで仕事前にも飲みやすい味でした。'),
 
-('social_break_fan_setting', 1, 1, 'user10', 2, '弱なら寒くないと思います。'),
+('social_break_fan_setting', 1, 1, 'user10', 2, '少し冷えやすいのですが、弱なら寒くないと思います。'),
 ('social_break_fan_setting', 1, 2, 'user21', 5, '壁へ向けると風が柔らかくなりそうです。'),
 ('social_break_fan_setting', 1, 3, 'user28', 9, '窓も少し開けておきますか？'),
 ('social_break_fan_setting', 1, 4, 'user10', 14, '外の音が入らない程度ならよさそうです。'),
@@ -98,7 +98,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_late_release_pause', 1, 6, 'user07', 27, '確認項目を三つに整理しておきました。'),
 ('social_late_release_pause', 1, 7, 'user15', 35, '保存できたので、今日はここで止めます。'),
 
-('social_late_rain_sound', 1, 1, 'user08', 2, 'あと十分で区切る予定です。'),
+('social_late_rain_sound', 1, 1, 'user08', 2, '少し名残惜しいですが、あと十分で区切る予定です。'),
 ('social_late_rain_sound', 1, 2, 'user40', 5, '入口に共有の大きな傘があります。'),
 ('social_late_rain_sound', 1, 3, 'user23', 9, '雨雲はしばらく残りそうですね。'),
 ('social_late_rain_sound', 1, 4, 'user08', 14, '作業内容を保存して、TODOも残しました。'),
@@ -283,7 +283,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_one_cloud', 1, 2, 'user39', 5, '端の方が尾びれみたいですね。'),
 ('social_one_cloud', 1, 3, 'user14', 9, '少しずつ形が崩れてきました。'),
 ('social_one_cloud', 1, 4, 'user01', 14, '今度は羽を広げた鳥にも見えます。'),
-('social_one_cloud', 1, 5, 'user39', 20, '青空が少し見えてきました。'),
+('social_one_cloud', 1, 5, 'user39', 20, '雲の間から青空が少し見えてきて、気持ちがよいですね。'),
 ('social_one_cloud', 1, 6, 'user14', 27, '数分で印象が変わるのが面白いです。'),
 ('social_one_cloud', 1, 7, 'user01', 35, '最後は細い線だけ残りました。'),
 

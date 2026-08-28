@@ -343,7 +343,7 @@ INSERT INTO channel_conversation_thread_replies (
 
 -- Secondary threads on later root posts
 ('biz_aurora_release_scope', 4, 1, 'user07', 2, '通知設定の確認だけを未完了として残す認識です。'),
-('biz_aurora_release_scope', 4, 2, 'user14', 6, '検索側は完了扱いで問題ありません。'),
+('biz_aurora_release_scope', 4, 2, 'user14', 6, '検索側は試験まで終えているので、完了扱いで問題なさそうです。'),
 ('biz_aurora_release_scope', 4, 3, 'user07', 11, '確認結果を進行表と案内文の両方へ反映します。'),
 ('biz_aurora_release_scope', 4, 4, 'user14', 17, '判定会までに状態が一目で分かるようになりました。'),
 
@@ -378,7 +378,7 @@ INSERT INTO channel_conversation_thread_replies (
 ('biz_sales_discovery', 3, 4, 'user20', 17, 'その流れなら先方の説明時間も十分に取れます。'),
 
 ('biz_sales_proposal_revision', 4, 1, 'user10', 2, '回収時期が延びた理由を注記へ入れてください。'),
-('biz_sales_proposal_revision', 4, 2, 'user16', 6, '習熟期間を見込んだ結果だと分かる表現にします。'),
+('biz_sales_proposal_revision', 4, 2, 'user16', 6, '先方が数字を追いやすいよう、習熟期間を見込んだ結果だと分かる表現にします。'),
 ('biz_sales_proposal_revision', 4, 3, 'user10', 11, '控えめな前提でも効果が残る点は説明できます。'),
 ('biz_sales_proposal_revision', 4, 4, 'user16', 17, '注記とグラフの期間表示を同じ条件へ揃えました。'),
 
@@ -402,7 +402,7 @@ INSERT INTO channel_conversation_thread_replies (
 ('biz_cs_usage_review', 4, 3, 'user29', 11, '実行人数と迷った箇所を同じ回で記録します。'),
 ('biz_cs_usage_review', 4, 4, 'user40', 17, '数字と理由の両方を次月に比較できそうです。'),
 
-('biz_design_empty_state', 3, 1, 'user05', 2, '主要ボタンは一つに絞った方が選びやすいです。'),
+('biz_design_empty_state', 3, 1, 'user05', 2, '操作に迷わせないため、主要ボタンは一つに絞る方向でどうでしょう。'),
 ('biz_design_empty_state', 3, 2, 'user11', 6, '条件を減らす操作を主要にする案へ直します。'),
 ('biz_design_empty_state', 3, 3, 'user05', 11, '全解除は補助リンクなら必要な方だけ選べます。'),
 ('biz_design_empty_state', 3, 4, 'user11', 17, '二つの優先度が伝わる配置になりました。'),
@@ -425,14 +425,14 @@ INSERT INTO channel_conversation_thread_replies (
 ('biz_weekly_support', 3, 1, 'user08', 2, '招待完了画面に案内へのリンクを置く案で進めます。'),
 ('biz_weekly_support', 3, 2, 'user24', 6, '回答用手順も同じ案内へつなぐ形にします。'),
 ('biz_weekly_support', 3, 3, 'user08', 11, '導線を揃えると更新箇所も一つにできます。'),
-('biz_weekly_support', 3, 4, 'user24', 17, '次の問い合わせで案内まで到達できるか確認します。'),
+('biz_weekly_support', 3, 4, 'user24', 17, '次の問い合わせで案内まで自然に到達できるか、対応しながら確認してみます。'),
 
 ('biz_procurement_laptops', 3, 1, 'user21', 2, '在庫構成で開発用の処理性能は満たしています。'),
 ('biz_procurement_laptops', 3, 2, 'user34', 6, '保証は標準で三年、故障時の交換にも対応します。'),
 ('biz_procurement_laptops', 3, 3, 'user21', 11, '要件と保証が揃うなら、構成変更は不要です。'),
 ('biz_procurement_laptops', 3, 4, 'user34', 17, '在庫五台を一週間の納期で仮押さえしました。'),
 
-('biz_announce_maintenance', 4, 1, 'user19', 2, '影響するのはログインと新規投稿の二機能です。'),
+('biz_announce_maintenance', 4, 1, 'user19', 2, '利用者への影響としては、ログインと新規投稿の二機能を案内すればよさそうです。'),
 ('biz_announce_maintenance', 4, 2, 'user22', 6, '閲覧済みの画面でも再接続が必要と追記します。'),
 ('biz_announce_maintenance', 4, 3, 'user19', 11, '作業後は20時15分までに確認結果を共有します。'),
 ('biz_announce_maintenance', 4, 4, 'user22', 17, '利用者が確認する時刻まで分かる案内になりました。'),

@@ -25,7 +25,7 @@ VALUES
     ('tech_permission_scope', 2, 'bot-dev-lab', 'user07', 7, 845, '利用するのは投稿作成、リアクション追加、対象チャンネルの閲覧だけです。'),
     ('tech_permission_scope', 3, 'bot-dev-lab', 'user33', 7, 851, 'ユーザー管理とチャンネル削除の権限は使っていないため外せます。'),
     ('tech_permission_scope', 4, 'bot-dev-lab', 'user15', 7, 858, '権限を絞ったトークンへ差し替え、通常のコマンドが動くことを確認しました。'),
-    ('tech_permission_scope', 5, 'bot-dev-lab', 'user07', 7, 864, '管理APIへの要求は403になりました。意図した制限が効いています。'),
+    ('tech_permission_scope', 5, 'bot-dev-lab', 'user07', 7, 864, '管理APIへの要求は403になりました。通常操作を妨げず、意図した制限が効いていそうです。'),
     ('tech_permission_scope', 6, 'bot-dev-lab', 'user33', 7, 871, '管理APIが拒否されるところまで見てもらえたので判断できました。必要権限の一覧を設定例へ追記し、この最小構成を基準にしてよいですか？'),
 
     ('tech_event_dedup', 1, 'bot-dev-lab', 'user20', 10, 960, '@user02 同じイベントが二度届くと、Botが重複投稿してしまいます。'),
@@ -39,7 +39,7 @@ VALUES
     ('tech_payload_schema', 2, 'bot-dev-lab', 'user28', 13, 605, '必須扱いしていた項目が、このイベントでは省略可能になっています。'),
     ('tech_payload_schema', 3, 'bot-dev-lab', 'user20', 13, 611, '共通部分とイベント固有部分を分け、固有項目は種別ごとに検証しましょう。'),
     ('tech_payload_schema', 4, 'bot-dev-lab', 'user07', 13, 618, '分岐を追加し、未知の種別は理由をログへ出して無視するようにしました。'),
-    ('tech_payload_schema', 5, 'bot-dev-lab', 'user28', 13, 624, '既存3種と新規1種のfixtureを通し、欠損時のエラーも確認できました。'),
+    ('tech_payload_schema', 5, 'bot-dev-lab', 'user28', 13, 624, '既存3種と新規1種のfixtureを通し、欠損時のエラーも確認できました。未知項目の例も足しておきますか？'),
     ('tech_payload_schema', 6, 'bot-dev-lab', 'user20', 13, 631, 'fixtureで既存種別まで確認できたので安心しました。未知の種別を無視するログ粒度も十分そうなら、このschemaでレビューへ出します。'),
 
     ('tech_standup_format', 1, 'bot-playground', 'user33', 2, 570, '@user15 `/standup` の結果が長く、要点を追いにくい状態です。'),
@@ -53,7 +53,7 @@ VALUES
     ('tech_mention_guard', 2, 'bot-playground', 'user33', 5, 724, '本文にBotのユーザー名が含まれるだけで処理を始めていました。'),
     ('tech_mention_guard', 3, 'bot-playground', 'user20', 5, 729, 'Mattermostが返すmention一覧にBotのIDがある場合だけ起動しましょう。'),
     ('tech_mention_guard', 4, 'bot-playground', 'user07', 5, 735, '文字列比較をやめ、mention情報を使う判定へ変更しました。'),
-    ('tech_mention_guard', 5, 'bot-playground', 'user33', 5, 741, '通常文、コード内の名前、明示mentionの三種類で期待通りに分岐します。'),
+    ('tech_mention_guard', 5, 'bot-playground', 'user33', 5, 741, '通常文、コード内の名前、明示mentionの三種類で期待通りに分岐します。編集投稿も同じ考え方でよさそうです。'),
     ('tech_mention_guard', 6, 'bot-playground', 'user20', 5, 748, 'コード内の名前まで試してもらえたのが効きました。誤反応がなくなったので、この三種類を回帰試験として残す判断でよいでしょうか？'),
 
     ('tech_rate_limit_demo', 1, 'bot-playground', 'user20', 8, 900, '@user28 負荷試験でBotが短時間に投稿しすぎる問題を再現できました。'),
@@ -95,7 +95,7 @@ VALUES
     ('tech_cache_invalidation', 2, 'dev-general', 'user02', 9, 815, '更新処理は成功していますが、一覧キャッシュを削除していません。'),
     ('tech_cache_invalidation', 3, 'dev-general', 'user28', 9, 821, '更新完了後に対象キーだけ消せば、全件削除を避けられます。'),
     ('tech_cache_invalidation', 4, 'dev-general', 'user13', 9, 828, '対象キーの削除を追加し、別ユーザーの一覧は保持されることも確認しました。'),
-    ('tech_cache_invalidation', 5, 'dev-general', 'user02', 9, 834, '更新直後の再取得で新しい値が返り、不要なDBアクセスも増えていません。'),
+    ('tech_cache_invalidation', 5, 'dev-general', 'user02', 9, 834, '更新直後の再取得で新しい値が返り、不要なDBアクセスも増えていません。この範囲なら展開しても問題なさそうでしょうか？'),
     ('tech_cache_invalidation', 6, 'dev-general', 'user28', 9, 841, '別ユーザーのcacheが残ることまで確かめてもらえて助かりました。削除対象の決め方をコメントへ残し、同じ形式の更新処理にも展開してよいですか？'),
 
     ('tech_transaction_boundary', 1, 'dev-general', 'user28', 12, 930, '@user15 登録失敗後に関連レコードだけ残る問題が出ています。'),
@@ -283,7 +283,7 @@ VALUES
     ('tech_release_notes', 1, 'release-notes', 'user27', 15, 690, '@user14 リリースノート案を読んだところ、内部module名と処理方式の説明が先に並び、利用者が何を確認すべきか掴みにくいと感じました。実際の変化は通知設定が保持されることと検索応答の改善で、操作手順は変わりません。既知の制約も一件あるため、単に「改善しました」とまとめるのは避けたいです。変更点、利用者への影響、制約、問い合わせ先の順へ組み替えてもらえますか？ 技術差分は開発記録へ分ける方針でよいかも確認したいです。'),
     ('tech_release_notes', 2, 'release-notes', 'user14', 15, 695, '利用者が変化を感じる通知設定と検索速度を先に書きます。'),
     ('tech_release_notes', 3, 'release-notes', 'user15', 15, 701, '既知の制約と、問題が起きた場合の連絡先も必要です。'),
-    ('tech_release_notes', 4, 'release-notes', 'user27', 15, 708, '@user15 技術用語を減らした案をレビューしてください。'),
+    ('tech_release_notes', 4, 'release-notes', 'user27', 15, 708, '@user15 読み手が影響を判断しやすいよう技術用語を減らしました。この案をレビューしてもらえますか？'),
     ('tech_release_notes', 5, 'release-notes', 'user15', 15, 714, '操作への影響が先に分かり、制約も具体的に読める内容になっています。'),
     ('tech_release_notes', 6, 'release-notes', 'user14', 15, 721, 'この文面を公開版に使い、詳細な実装差分は開発記録へ分けます。');
 
