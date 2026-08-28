@@ -1,0 +1,6 @@
+.DS_Store
+.playwright-cli/
+output/playwright/
+script/__pycache__/
+script/import.jsonl
+script/mattermost_import.zip

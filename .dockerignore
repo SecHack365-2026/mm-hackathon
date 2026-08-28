@@ -1,0 +1,7 @@
+.git
+.gitignore
+.playwright-cli
+output
+script/__pycache__
+script/import.jsonl
+script/mattermost_import.zip
