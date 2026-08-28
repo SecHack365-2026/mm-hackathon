@@ -9,7 +9,7 @@ INSERT INTO channel_conversation_thread_replies(
 ) VALUES
 -- town-square
 ('social_town_lunch_map', 1, 1, 'user18', 2, '出店場所は正面入口を出て右側です。'),
-('social_town_lunch_map', 1, 2, 'user27', 5, '豆のカレーは辛さ控えめでしょうか？'),
+('social_town_lunch_map', 1, 2, 'user27', 5, '豆のカレーが気になります。辛いものが少し苦手でも食べられそうでしょうか？'),
 ('social_town_lunch_map', 1, 3, 'user18', 9, '香りはありますが、辛さはかなり穏やかでした。'),
 ('social_town_lunch_map', 1, 4, 'user12', 14, 'ご飯の量を少なめにもできるそうです。'),
 ('social_town_lunch_map', 1, 5, 'user27', 20, 'それなら今日はカレーにしてみます。'),
@@ -20,7 +20,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_town_lost_umbrella', 1, 2, 'user08', 5, '持ち手や目印の特徴はありますか？'),
 ('social_town_lost_umbrella', 1, 3, 'user31', 9, '木の持ち手の傘が一本ありました。'),
 ('social_town_lost_umbrella', 1, 4, 'user20', 14, '白い小さな印も付いています。'),
-('social_town_lost_umbrella', 1, 5, 'user08', 20, '見つかってよかったです。'),
+('social_town_lost_umbrella', 1, 5, 'user08', 20, '雨が降る前に見つかって、こちらもほっとしました。'),
 ('social_town_lost_umbrella', 1, 6, 'user20', 27, '受付横なら取り違えも少なそうですね。'),
 ('social_town_lost_umbrella', 1, 7, 'user31', 35, '倒れないよう奥側へ入れておきました。'),
 
@@ -30,7 +30,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_town_music_poll', 1, 4, 'user06', 14, '器楽曲なら条件に合いそうですね。'),
 ('social_town_music_poll', 1, 5, 'user35', 20, '最初の曲、落ち着いていて好きです。'),
 ('social_town_music_poll', 1, 6, 'user14', 27, '席を離れるとほとんど聞こえない音量です。'),
-('social_town_music_poll', 1, 7, 'user06', 35, 'この設定なら午後も続けられそうです。'),
+('social_town_music_poll', 1, 7, 'user06', 35, '静かすぎるより気持ちが切り替わるので、この設定なら午後も心地よく続けられそうです。'),
 
 ('social_town_snack_share', 1, 1, 'user24', 2, '塩味のお菓子はどの箱でしょうか？'),
 ('social_town_snack_share', 1, 2, 'user16', 5, '青い箱がせんべい、白い箱が甘い方です。'),
@@ -38,7 +38,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_town_snack_share', 1, 4, 'user24', 14, '辛くないなら一枚いただきます。'),
 ('social_town_snack_share', 1, 5, 'user16', 20, '甘い方は小さな焼き菓子でした。'),
 ('social_town_snack_share', 1, 6, 'user30', 27, '飲み物の横へ紙ナプキンも置きました。'),
-('social_town_snack_share', 1, 7, 'user24', 35, '休憩にちょうどよい量でした。'),
+('social_town_snack_share', 1, 7, 'user24', 35, '少しだけ食べたい気分だったので、休憩にちょうどよい量でした。'),
 
 ('social_town_window_weather', 1, 1, 'user32', 2, 'いま細かい雨が降り始めました。'),
 ('social_town_window_weather', 1, 2, 'user05', 5, '窓際に置いた紙だけ移動します。'),
@@ -46,7 +46,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_town_window_weather', 1, 4, 'user32', 14, '西側の窓は閉めた方がよさそうです。'),
 ('social_town_window_weather', 1, 5, 'user05', 20, '窓を閉めて入口のマットを出しました。'),
 ('social_town_window_weather', 1, 6, 'user18', 27, '外出中の方にも傘の連絡をしておきます。'),
-('social_town_window_weather', 1, 7, 'user32', 35, '雨脚は少し弱くなってきました。'),
+('social_town_window_weather', 1, 7, 'user32', 35, '雨脚は少し弱くなってきました。外出する方は、もう少し待てそうなら慌てずに。'),
 
 -- break-room
 ('social_break_coffee_grind', 1, 1, 'user19', 2, '通話が終わったので、今なら大丈夫です。'),
@@ -55,7 +55,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_break_coffee_grind', 1, 4, 'user19', 14, '一分くらいなら気にならないと思います。'),
 ('social_break_coffee_grind', 1, 5, 'user28', 20, 'お湯が余れば少し分けてください。'),
 ('social_break_coffee_grind', 1, 6, 'user11', 27, '小さいカップを棚から出しました。'),
-('social_break_coffee_grind', 1, 7, 'user28', 35, '香りも味も落ち着いていておいしいです。'),
+('social_break_coffee_grind', 1, 7, 'user28', 35, '苦すぎないか少し迷いましたが、香りも味も落ち着いていて好みでした。'),
 
 ('social_break_fridge_label', 1, 1, 'user11', 2, '緑のふたなら私が昨日入れたものです。'),
 ('social_break_fridge_label', 1, 2, 'user33', 5, '同じ形の容器が多いので迷いますね。'),
@@ -63,13 +63,13 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_break_fridge_label', 1, 4, 'user11', 14, '今日中に持ち帰る予定です。'),
 ('social_break_fridge_label', 1, 5, 'user33', 20, '油性ペンを一本補充しておきました。'),
 ('social_break_fridge_label', 1, 6, 'user06', 27, '日付も書くと整理しやすそうです。'),
-('social_break_fridge_label', 1, 7, 'user11', 35, '名前と日付を書いた札を付けました。'),
+('social_break_fridge_label', 1, 7, 'user11', 35, '次は迷わせないよう、名前と日付を大きめに書いた札を付けました。'),
 
 ('social_break_stretch', 1, 1, 'user07', 2, '椅子に座ったままの動きならすぐできます。'),
 ('social_break_stretch', 1, 2, 'user13', 5, '三分だけ参加してみたいです。'),
 ('social_break_stretch', 1, 3, 'user31', 9, '肩を上げるときは息を止めない方がよいですか？'),
 ('social_break_stretch', 1, 4, 'user07', 14, 'はい、ゆっくり呼吸しながら動かしましょう。'),
-('social_break_stretch', 1, 5, 'user13', 20, '首の横が少し伸びる感じがします。'),
+('social_break_stretch', 1, 5, 'user13', 20, '無理に動かしていないのに、首の横が気持ちよく伸びる感じがします。'),
 ('social_break_stretch', 1, 6, 'user31', 27, '無理に回さないので安心ですね。'),
 ('social_break_stretch', 1, 7, 'user07', 35, '痛みが出る前に止めれば十分です。'),
 
@@ -79,13 +79,13 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_break_tea_choice', 1, 4, 'user17', 14, '香ばしいですが、強すぎない香りです。'),
 ('social_break_tea_choice', 1, 5, 'user38', 20, '茶葉の量は缶に書いてありますか？'),
 ('social_break_tea_choice', 1, 6, 'user09', 27, 'ふたに一杯分の目安が貼ってあります。'),
-('social_break_tea_choice', 1, 7, 'user17', 35, '仕事前にも飲みやすい味でした。'),
+('social_break_tea_choice', 1, 7, 'user17', 35, '朝は紅茶と迷いましたが、香りが穏やかで仕事前にも飲みやすい味でした。'),
 
 ('social_break_fan_setting', 1, 1, 'user10', 2, '弱なら寒くないと思います。'),
 ('social_break_fan_setting', 1, 2, 'user21', 5, '壁へ向けると風が柔らかくなりそうです。'),
 ('social_break_fan_setting', 1, 3, 'user28', 9, '窓も少し開けておきますか？'),
 ('social_break_fan_setting', 1, 4, 'user10', 14, '外の音が入らない程度ならよさそうです。'),
-('social_break_fan_setting', 1, 5, 'user21', 20, '空気が少し動いて快適になりました。'),
+('social_break_fan_setting', 1, 5, 'user21', 20, '強い風が苦手なので心配でしたが、空気だけが少し動いて快適になりました。'),
 ('social_break_fan_setting', 1, 6, 'user28', 27, '最後に出るとき窓を閉めます。'),
 ('social_break_fan_setting', 1, 7, 'user10', 35, 'この向きなら直接風が当たりません。'),
 
@@ -94,7 +94,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_late_release_pause', 1, 2, 'user26', 5, '残りは急ぎでなければ明日に回しましょう。'),
 ('social_late_release_pause', 1, 3, 'user07', 9, '今夜の差分は小さくまとまっていますか？'),
 ('social_late_release_pause', 1, 4, 'user15', 14, '表示調整が一件だけ残っています。'),
-('social_late_release_pause', 1, 5, 'user26', 20, '明るい時間に画面を見直す方が安心です。'),
+('social_late_release_pause', 1, 5, 'user26', 20, 'ここまで進んでいれば十分です。細かな表示は明るい時間に見直す方が安心ですね。'),
 ('social_late_release_pause', 1, 6, 'user07', 27, '確認項目を三つに整理しておきました。'),
 ('social_late_release_pause', 1, 7, 'user15', 35, '保存できたので、今日はここで止めます。'),
 
@@ -104,7 +104,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_late_rain_sound', 1, 4, 'user08', 14, '作業内容を保存して、TODOも残しました。'),
 ('social_late_rain_sound', 1, 5, 'user40', 20, '足元が暗いので帰り道は気を付けてください。'),
 ('social_late_rain_sound', 1, 6, 'user23', 27, '強くなる前に私も切り上げます。'),
-('social_late_rain_sound', 1, 7, 'user08', 35, '傘を借りて帰ります。情報助かりました。'),
+('social_late_rain_sound', 1, 7, 'user08', 35, '傘が見つかって安心しました。急がず足元を見ながら帰ります。'),
 
 ('social_late_bookmark', 1, 1, 'user29', 2, '今夜読むものだけ先に分けるとよさそうです。'),
 ('social_late_bookmark', 1, 2, 'user05', 5, '題名に一行メモを添えるだけでも十分です。'),
@@ -112,13 +112,13 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_late_bookmark', 1, 4, 'user29', 14, '三件なら、今夜はそこまでに絞れそうですね。'),
 ('social_late_bookmark', 1, 5, 'user05', 20, '残りは明日読む箱へ移しましょう。'),
 ('social_late_bookmark', 1, 6, 'user12', 27, '分類名を短くすると後から探しやすいです。'),
-('social_late_bookmark', 1, 7, 'user29', 35, '続きが分かる状態なら今日は十分です。'),
+('social_late_bookmark', 1, 7, 'user29', 35, '続きが分かる状態まで整えられたなら、今日は十分です。残りは明日の自分に任せましょう。'),
 
 ('social_late_keyboard', 1, 1, 'user37', 2, '静かな環境ほど打鍵音が気になりますね。'),
 ('social_late_keyboard', 1, 2, 'user01', 5, '無理せず一区切りで休んでください。'),
 ('social_late_keyboard', 1, 3, 'user14', 9, '環境音を小さく流すと和らぐかもしれません。'),
 ('social_late_keyboard', 1, 4, 'user37', 14, '雨音くらいなら集中を邪魔しにくいです。'),
-('social_late_keyboard', 1, 5, 'user01', 20, 'タイマーも付けておくと安心ですね。'),
+('social_late_keyboard', 1, 5, 'user01', 20, '集中しすぎて夜更かししないよう、環境音と一緒にタイマーも付けておくと安心ですね。'),
 ('social_late_keyboard', 1, 6, 'user14', 27, '明日の最初の作業だけメモして終えましょう。'),
 ('social_late_keyboard', 1, 7, 'user37', 35, '保存を確認したら画面を閉じるのがよさそうです。'),
 
@@ -126,7 +126,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_remote_mic_test', 1, 1, 'user24', 2, '声は聞こえますが、机の音も少し入っています。'),
 ('social_remote_mic_test', 1, 2, 'user39', 5, 'マイクの下に布を敷くと改善するかもしれません。'),
 ('social_remote_mic_test', 1, 3, 'user10', 9, '自動音量調整も一度確認してみてください。'),
-('social_remote_mic_test', 1, 4, 'user24', 14, 'いまは振動音がかなり減りました。'),
+('social_remote_mic_test', 1, 4, 'user24', 14, 'いまは振動音がかなり減りました。声は自然なままなので、この位置がよさそうです。'),
 ('social_remote_mic_test', 1, 5, 'user39', 20, '声の大きさはそのままで大丈夫です。'),
 ('social_remote_mic_test', 1, 6, 'user10', 27, '息の音も強く入っていません。'),
 ('social_remote_mic_test', 1, 7, 'user24', 35, 'この設定なら朝の通話で使えそうです。'),
@@ -137,7 +137,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_remote_delivery', 1, 4, 'user03', 14, 'その一件も十五時までで大丈夫でした。'),
 ('social_remote_delivery', 1, 5, 'user30', 20, '戻ったときに上から見れば追える状態です。'),
 ('social_remote_delivery', 1, 6, 'user20', 27, '不在中の経緯も短く残しておきます。'),
-('social_remote_delivery', 1, 7, 'user03', 35, 'こちらは落ち着いているので慌てなくて大丈夫です。'),
+('social_remote_delivery', 1, 7, 'user03', 35, 'こちらは落ち着いています。待たせていると思わず、荷物を受け取ってから戻ってきてください。'),
 
 ('social_remote_sunlight', 1, 1, 'user28', 2, '窓に対して横向きだと映り込みが減ります。'),
 ('social_remote_sunlight', 1, 2, 'user40', 5, '薄い布を一枚掛ける方法もあります。'),
@@ -145,7 +145,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_remote_sunlight', 1, 4, 'user28', 14, '少し回すだけでも違いが出ると思います。'),
 ('social_remote_sunlight', 1, 5, 'user40', 20, '午後は暗くなるので戻しやすい配置がよさそうです。'),
 ('social_remote_sunlight', 1, 6, 'user04', 27, '電源ケーブルにも余裕を持たせてください。'),
-('social_remote_sunlight', 1, 7, 'user28', 35, '画面の明るさを上げすぎずに済みそうですね。'),
+('social_remote_sunlight', 1, 7, 'user28', 35, '目の疲れが少し気になっていたので、画面の明るさを上げすぎずに済みそうで安心です。'),
 
 ('social_remote_focus_block', 1, 1, 'user09', 2, '急ぎの連絡はこちらで拾っておきます。'),
 ('social_remote_focus_block', 1, 2, 'user17', 5, '私も同じ時間を集中枠にします。'),
@@ -153,7 +153,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_remote_focus_block', 1, 4, 'user09', 14, '割り込みが必要なら明記しておきます。'),
 ('social_remote_focus_block', 1, 5, 'user17', 20, '通知を一時間だけ静かにしました。'),
 ('social_remote_focus_block', 1, 6, 'user22', 27, 'こちらの確認は戻ってからで大丈夫です。'),
-('social_remote_focus_block', 1, 7, 'user09', 35, '今のところ急ぎの連絡はありません。'),
+('social_remote_focus_block', 1, 7, 'user09', 35, '今のところ急ぎの連絡はありません。安心して予定の時間まで集中してください。'),
 
 -- office-events
 ('social_event_boardgame', 1, 1, 'user21', 2, '三十分で終わるものなら参加しやすいです。'),
@@ -162,7 +162,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_event_boardgame', 1, 4, 'user21', 14, '自由参加なら予定を合わせやすいですね。'),
 ('social_event_boardgame', 1, 5, 'user34', 20, '最初は説明が短い方を出します。'),
 ('social_event_boardgame', 1, 6, 'user15', 27, '十七時ごろに少し覗いてみます。'),
-('social_event_boardgame', 1, 7, 'user21', 35, '人数が多ければ二卓に分かれましょう。'),
+('social_event_boardgame', 1, 7, 'user21', 35, '初参加の人が待たなくて済むよう、人数が多ければ二卓に分かれましょう。'),
 
 ('social_event_photo_walk', 1, 1, 'user26', 2, 'スマートフォンだけでも参加できますか？'),
 ('social_event_photo_walk', 1, 2, 'user36', 5, '日陰の多い短い経路だとうれしいです。'),
@@ -170,7 +170,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_event_photo_walk', 1, 4, 'user26', 14, '道具を選ばないなら気軽に参加できますね。'),
 ('social_event_photo_walk', 1, 5, 'user36', 20, '十五分くらいなら昼休みに収まりそうです。'),
 ('social_event_photo_walk', 1, 6, 'user08', 27, '雨の場合は室内の光を探す会にできます。'),
-('social_event_photo_walk', 1, 7, 'user26', 35, '当日の天気を見て入口へ行きます。'),
+('social_event_photo_walk', 1, 7, 'user26', 35, '写真に自信はありませんが、景色を見る会なら楽しめそうです。当日の天気を見て入口へ行きます。'),
 
 ('social_event_lightning_talk', 1, 1, 'user04', 2, 'メモの整理方法なら五分で話せそうです。'),
 ('social_event_lightning_talk', 1, 2, 'user25', 5, '実際の画面が一枚あると伝わりやすいです。'),
@@ -181,7 +181,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_event_lightning_talk', 1, 7, 'user04', 35, '時間内に収まるよう一度練習します。'),
 
 ('social_event_cleanup', 1, 1, 'user10', 2, '机と椅子を戻す作業なら担当できます。'),
-('social_event_cleanup', 1, 2, 'user38', 5, '飲み物とごみの確認を引き受けます。'),
+('social_event_cleanup', 1, 2, 'user38', 5, '飲み物とごみの確認なら慣れているので、こちらで引き受けます。'),
 ('social_event_cleanup', 1, 3, 'user06', 9, '分別用の袋は会場にありますか？'),
 ('social_event_cleanup', 1, 4, 'user10', 14, '机の配置を写真に残しておくと戻しやすいです。'),
 ('social_event_cleanup', 1, 5, 'user38', 20, '袋は入口の箱に三種類あります。'),
@@ -255,7 +255,7 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_weekend_cooking', 1, 7, 'user33', 35, '材料がそろっているので週末に試します。'),
 
 ('social_weekend_puzzle', 1, 1, 'user36', 2, '十分ほどで解ける難しさがよさそうです。'),
-('social_weekend_puzzle', 1, 2, 'user18', 5, '言葉遊びなら一問用意できます。'),
+('social_weekend_puzzle', 1, 2, 'user18', 5, '少し迷うくらいの言葉遊びなら、一問用意できそうです。'),
 ('social_weekend_puzzle', 1, 3, 'user11', 9, 'ヒントを二段階に分けると遊びやすそうです。'),
 ('social_weekend_puzzle', 1, 4, 'user36', 14, '初めての人もいるので競争にはしないでおきましょう。'),
 ('social_weekend_puzzle', 1, 5, 'user18', 20, '答えは別の紙にして封筒へ入れます。'),
@@ -334,6 +334,107 @@ INSERT INTO channel_conversation_thread_replies(
 ('social_mystery_hum', 1, 4, 'user11', 14, '空気清浄機の表示かもしれません。'),
 ('social_mystery_hum', 1, 5, 'user19', 20, '説明にはフィルター確認とあります。'),
 ('social_mystery_hum', 1, 6, 'user35', 27, '交換時期を知らせる音だったようです。'),
-('social_mystery_hum', 1, 7, 'user11', 35, '原因が分かったので担当へ連絡します。');
+('social_mystery_hum', 1, 7, 'user11', 35, '原因が分かったので担当へ連絡します。'),
+
+-- Secondary threads branching from the middle of channel conversations.
+('social_town_lunch_map', 3, 1, 'user18', 1, '辛い香辛料は別添えなので、入れなければ穏やかです。'),
+('social_town_lunch_map', 3, 2, 'user12', 3, '豆の食感が残っていて、量も昼にはちょうどよかったです。'),
+('social_town_lunch_map', 3, 3, 'user18', 6, '小さいサイズも選べるので、迷ったら売り場で聞けます。'),
+('social_town_lunch_map', 3, 4, 'user12', 10, '次に見かけたら私もカレーを選んでみます。'),
+
+('social_town_lost_umbrella', 5, 1, 'user12', 1, '本当に似た紺色が多くて、私も一度取り違えそうになりました。'),
+('social_town_lost_umbrella', 5, 2, 'user31', 3, '持ち手に巻ける色付きバンドを置いておくとよさそうです。'),
+('social_town_lost_umbrella', 5, 3, 'user12', 6, '目印が選べるなら、無地の傘でも見分けやすくなりますね。'),
+('social_town_lost_umbrella', 5, 4, 'user31', 10, '余っているバンドがあるので、受付横へ数本置きます。'),
+
+('social_town_music_poll', 3, 1, 'user22', 1, '歌詞があると、つい言葉の方へ意識が向きますよね。'),
+('social_town_music_poll', 3, 2, 'user06', 3, '器楽曲でもテンポが速すぎないものを選びたいです。'),
+('social_town_music_poll', 3, 3, 'user22', 6, '午後前半は明るめ、夕方は静かめに分けてもよさそうです。'),
+('social_town_music_poll', 3, 4, 'user06', 10, 'その切り替えなら気分転換にもなりそうです。'),
+
+('social_town_snack_share', 3, 1, 'user24', 1, '表示が残っていると、初めてのお菓子でも選びやすくて安心です。'),
+('social_town_snack_share', 3, 2, 'user16', 3, '箱から出す場合も、表示だけ横に置くようにしたいですね。'),
+('social_town_snack_share', 3, 3, 'user24', 6, '分からないものは無理に選ばず聞ける雰囲気だとうれしいです。'),
+('social_town_snack_share', 3, 4, 'user16', 10, '次に置くときの小さな案内札を作っておきます。'),
+
+('social_town_window_weather', 3, 1, 'user14', 1, '気付いてくれて助かりました。紙の端が少し浮いていました。'),
+('social_town_window_weather', 3, 2, 'user32', 3, '風が急に変わったので、窓側だけ先に閉めましょう。'),
+('social_town_window_weather', 3, 3, 'user14', 6, '資料は棚へ移せたので、濡れずに済みました。'),
+('social_town_window_weather', 3, 4, 'user32', 10, '雨が落ち着いたら、空気を入れ替える程度にまた開けます。'),
+
+('social_break_coffee_grind', 3, 1, 'user04', 1, 'よく分かりましたね。今日は少し深めの豆です。'),
+('social_break_coffee_grind', 3, 2, 'user19', 3, '香りはしっかりしていますが、苦すぎなさそうですね。'),
+('social_break_coffee_grind', 3, 3, 'user04', 6, '酸味が苦手な人にも飲みやすいと思います。'),
+('social_break_coffee_grind', 3, 4, 'user19', 10, '休憩のときに少量だけ味見させてください。'),
+
+('social_break_fridge_label', 3, 1, 'user11', 1, '付箋があると、急いでいるときも忘れずに書けそうです。'),
+('social_break_fridge_label', 3, 2, 'user33', 3, '水気で剥がれにくい場所を決めておきましょう。'),
+('social_break_fridge_label', 3, 3, 'user11', 6, '容器のふたに貼れば、取り出すときも見えますね。'),
+('social_break_fridge_label', 3, 4, 'user33', 10, 'ペンと一緒に予備を補充しておきます。'),
+
+('social_break_stretch', 3, 1, 'user07', 1, '三分なら、肩と首を一つずつ動かすくらいがよさそうです。'),
+('social_break_stretch', 3, 2, 'user25', 3, '短くても一度画面から目を離せるのがうれしいですね。'),
+('social_break_stretch', 3, 3, 'user07', 6, '終わった後に楽かどうかだけ、無理なく確かめてみましょう。'),
+('social_break_stretch', 3, 4, 'user25', 10, '午後に固まったら、同じ動きを思い出してみます。'),
+
+('social_break_tea_choice', 4, 1, 'user30', 1, '柑橘の香りは強すぎないので、気分転換に合うと思います。'),
+('social_break_tea_choice', 4, 2, 'user17', 3, '午後の区切りに一杯あると、席へ戻りやすそうですね。'),
+('social_break_tea_choice', 4, 3, 'user30', 6, '試すときは薄めに淹れて、好みを聞かせてください。'),
+('social_break_tea_choice', 4, 4, 'user17', 10, '香りを見てから濃さを決められるのは助かります。'),
+
+('social_break_fan_setting', 3, 1, 'user36', 1, '外の音が気にならない程度なら、少し開けたいです。'),
+('social_break_fan_setting', 3, 2, 'user10', 3, '風が通れば、扇風機をさらに弱くできるかもしれません。'),
+('social_break_fan_setting', 3, 3, 'user36', 6, 'まず指二本分だけ開けて様子を見ます。'),
+('social_break_fan_setting', 3, 4, 'user10', 10, 'このくらいなら音も温度も気になりません。'),
+
+('social_late_release_pause', 3, 1, 'user15', 1, '明日に回せると言ってもらえて、少し肩の力が抜けました。'),
+('social_late_release_pause', 3, 2, 'user07', 3, '判断材料が残っていれば、朝の再開も難しくありません。'),
+('social_late_release_pause', 3, 3, 'user15', 6, '見た箇所と残った箇所を分けて書いておきます。'),
+('social_late_release_pause', 3, 4, 'user07', 10, 'そのメモがあれば、別の人でも確認を引き継げます。'),
+
+('social_late_rain_sound', 5, 1, 'user08', 1, '共有の傘があるなら、慌てず片付けられそうです。'),
+('social_late_rain_sound', 5, 2, 'user34', 3, '大きい傘なので、荷物があっても濡れにくいと思います。'),
+('social_late_rain_sound', 5, 3, 'user08', 6, '借りた人が分かるよう、受付の札へ記入します。'),
+('social_late_rain_sound', 5, 4, 'user34', 10, '明日戻せれば大丈夫なので、足元を優先してください。'),
+
+('social_late_bookmark', 4, 1, 'user16', 1, '一行メモなら負担にならず、朝も思い出せそうです。'),
+('social_late_bookmark', 4, 2, 'user29', 3, 'なぜ残したかだけ書けば、細かな要約までは不要ですよ。'),
+('social_late_bookmark', 4, 3, 'user16', 6, '結論に使う、例として見る、の二つに分けました。'),
+('social_late_bookmark', 4, 4, 'user29', 10, '十分整理できています。今夜は安心して閉じられますね。'),
+
+('social_late_keyboard', 4, 1, 'user23', 1, 'タイマーがあれば、環境音を流し続ける心配も減りますね。'),
+('social_late_keyboard', 4, 2, 'user01', 3, '十五分くらいで一度止まる設定がよさそうです。'),
+('social_late_keyboard', 4, 3, 'user23', 6, '短い雨音にして、作業の区切りにも使います。'),
+('social_late_keyboard', 4, 4, 'user01', 10, '音が止まったら、そのまま休憩へ移ってくださいね。'),
+
+('social_remote_mic_test', 3, 1, 'user24', 1, '布を敷いたら、机の振動音がほとんど消えました。'),
+('social_remote_mic_test', 3, 2, 'user39', 3, '声の響きは変わっていないので、その位置でよさそうです。'),
+('social_remote_mic_test', 3, 3, 'user24', 6, '少しの工夫で直って、こちらもほっとしました。'),
+('social_remote_mic_test', 3, 4, 'user39', 10, '本番前にもう一度だけ同じ位置を確認しましょう。'),
+
+('social_remote_delivery', 4, 1, 'user18', 1, '優先順が見えると、戻った直後に迷わず助かります。'),
+('social_remote_delivery', 4, 2, 'user03', 3, '急ぎ、今日中、待てる、の三段階にしました。'),
+('social_remote_delivery', 4, 3, 'user18', 6, 'その分け方なら、一番上から落ち着いて確認できます。'),
+('social_remote_delivery', 4, 4, 'user03', 10, '状況が変わった項目だけ、こちらで追記しておきます。'),
+
+('social_remote_sunlight', 4, 1, 'user13', 1, '布なら机を大きく動かさずに試せるのがよいですね。'),
+('social_remote_sunlight', 4, 2, 'user28', 3, 'まず片側だけ覆うと、暗くなりすぎないと思います。'),
+('social_remote_sunlight', 4, 3, 'user13', 6, '午後の明るさも見て、机の向きと比べてみます。'),
+('social_remote_sunlight', 4, 4, 'user28', 10, '目が疲れにくい方を選べれば十分です。'),
+
+('social_remote_focus_block', 4, 1, 'user32', 1, '同じ時間に誰かも作業していると思うと、始めやすいです。'),
+('social_remote_focus_block', 4, 2, 'user09', 3, '終わったら一言だけ戻ったことを共有しましょう。'),
+('social_remote_focus_block', 4, 3, 'user32', 6, '成果の量ではなく、集中できたかを振り返りたいです。'),
+('social_remote_focus_block', 4, 4, 'user09', 10, 'それなら気負わず参加できます。私も通知を静かにします。'),
+
+('social_event_boardgame', 3, 1, 'user07', 1, '二種類あれば、人数が読めなくても選べて助かります。'),
+('social_event_boardgame', 3, 2, 'user21', 3, '大きな声を出さず遊べるものだと周囲にも安心ですね。'),
+('social_event_boardgame', 3, 3, 'user07', 6, '会話中心の静かな方を最初に出しましょう。'),
+('social_event_boardgame', 3, 4, 'user21', 10, '六人集まらなければ四人用を交代で遊べそうです。'),
+
+('social_event_photo_walk', 3, 1, 'user26', 1, '道具より景色を見る会なら、気軽に参加できそうです。'),
+('social_event_photo_walk', 3, 2, 'user36', 3, 'うまく撮ることより、一つ発見するくらいがよいですね。'),
+('social_event_photo_walk', 3, 3, 'user26', 6, '気に入った光を一枚だけ撮るつもりで歩きます。'),
+('social_event_photo_walk', 3, 4, 'user36', 10, '戻った後も、共有したい人だけ見せる形だと安心です。');
 
 COMMIT;
