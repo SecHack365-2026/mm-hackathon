@@ -16,9 +16,15 @@ INIT_FLAG="/mm/mattermost-data/.sh365-initialized"
 if [ ! -f "$INIT_FLAG" ]; then
     echo "========== STARTING INITIAL SETUP =========="
     
-    # 1. Configファイルをjqで書き換え（LocalMode, PAT, Bot, Team削除を事前に有効化）
-    echo "Enabling LocalMode and API features in config..."
-    jq '.ServiceSettings.EnableLocalMode = true | .ServiceSettings.EnableUserAccessTokens = true | .ServiceSettings.EnableBotAccountCreation = true | .ServiceSettings.EnableAPITeamDeletion = true' /mm/mattermost/config/config_docker.json > /tmp/config_tmp.json
+    # 1. ローカルデモ向けの設定を有効化
+    echo "Configuring local demo settings..."
+    jq '.ServiceSettings.EnableLocalMode = true
+        | .ServiceSettings.EnableUserAccessTokens = true
+        | .ServiceSettings.EnableBotAccountCreation = true
+        | .ServiceSettings.EnableAPITeamDeletion = true
+        | .ServiceSettings.SiteURL = "http://localhost:8065"
+        | .TeamSettings.TeammateNameDisplay = "nickname_full_name"' \
+        /mm/mattermost/config/config_docker.json > /tmp/config_tmp.json
     mv /tmp/config_tmp.json /mm/mattermost/config/config_docker.json
 
     # 2. Mattermostをバックグラウンドで一時起動
@@ -40,6 +46,11 @@ if [ ! -f "$INIT_FLAG" ]; then
     mmctl user create --local --email admin01@sh365.fes --username admin01 --password SH365Fes
     mmctl user make_admin --local admin01
     mmctl team create --local --name default --display-name "default"
+
+    # previewイメージ同梱のAIプラグインは設定済みのAIユーザーを要求するため、
+    # 汎用Botデモでは無効化して不要な404とUI項目を出さない。
+    echo "Disabling the unconfigured Mattermost AI plugin..."
+    mmctl plugin disable mattermost-ai --local || true
 
     # 4. ダミーデータの生成とインポート
     # ※ --local フラグを使うことでパスワード認証なしで実行可能
@@ -70,9 +81,19 @@ if [ ! -f "$INIT_FLAG" ]; then
         exit 1
     fi
     
-    # 5. 初期チームの削除
+    # 5. 初期チームと自動生成チャンネルを整理
     echo "Deleting default team..."
     mmctl team delete default --local --confirm || true
+
+    echo "Removing the unused Off-Topic channel..."
+    mmctl channel delete sh365-fes:off-topic --local --confirm || true
+
+    # README記載の管理者アカウントから全デモチャンネルを確認できるようにする
+    echo "Adding admin01 to all demo channels..."
+    mmctl team users add sh365-fes admin01 --local
+    while IFS= read -r channel_name; do
+        mmctl channel users add "sh365-fes:$channel_name" admin01 --local
+    done < <(mmctl channel list sh365-fes --local --json | jq -r '.[].name')
 
     # 6. 不要ファイルの削除 (コンテナ内をクリーンにするため)
     rm -f /work/generate_mm_import.py /work/mattermost_import.zip /work/import.jsonl
