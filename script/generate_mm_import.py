@@ -5,6 +5,7 @@
 import json
 import os
 import random
+import re
 import sqlite3
 import time
 import zipfile
@@ -17,6 +18,8 @@ DB_PATH = os.path.join(OUT_DIR, "mm_data.db")
 ZIP_PATH = os.path.join(OUT_DIR, "mattermost_import.zip")
 TEMP_JSONL_PATH = os.path.join(OUT_DIR, "import.jsonl")
 JST = timezone(timedelta(hours=9))
+MENTION_PATTERN = re.compile(r"(?<![\w@])@([A-Za-z0-9_-]+)")
+SPECIAL_MENTIONS = {"all", "channel", "here"}
 
 EMOJI_POOL = [
     "+1",
@@ -49,6 +52,7 @@ def ensure_db_ready(conn):
         "messages",
         "channel_weights",
         "story_steps",
+        "channel_conversation_steps",
         "settings",
         "personas",
     }
@@ -109,6 +113,42 @@ def load_core_data(conn):
         """,
     )
 
+    conversation_steps = fetchall_dict(
+        conn,
+        """
+        SELECT conversation_id, step_order, channel_name, username,
+               day_offset, minute_of_day, message
+        FROM channel_conversation_steps
+        ORDER BY conversation_id, step_order
+        """,
+    )
+
+    conversations = defaultdict(list)
+    usernames = {user["username"] for user in users}
+    for step in conversation_steps:
+        conversations[step["conversation_id"]].append(step)
+        for mention in MENTION_PATTERN.findall(step["message"]):
+            if mention not in usernames | SPECIAL_MENTIONS | {"admin01"}:
+                raise RuntimeError(f"conversation mentions unknown user: @{mention}")
+    for conversation_id, steps in conversations.items():
+        expected_orders = list(range(1, len(steps) + 1))
+        actual_orders = [step["step_order"] for step in steps]
+        if actual_orders != expected_orders:
+            raise RuntimeError(
+                f"conversation has non-contiguous steps: {conversation_id} {actual_orders}"
+            )
+        if len({step["channel_name"] for step in steps}) != 1:
+            raise RuntimeError(f"conversation spans multiple channels: {conversation_id}")
+        if len({step["username"] for step in steps}) < 2:
+            raise RuntimeError(f"conversation has fewer than two authors: {conversation_id}")
+        timeline = [(step["day_offset"], step["minute_of_day"]) for step in steps]
+        if any(
+            current_day != next_day or current_minute >= next_minute
+            for (current_day, current_minute), (next_day, next_minute)
+            in zip(timeline, timeline[1:])
+        ):
+            raise RuntimeError(f"conversation timestamps are not increasing: {conversation_id}")
+
     for channel in channels:
         category = channel["category"]
         if not message_bank[category]["single"]:
@@ -125,10 +165,19 @@ def load_core_data(conn):
         message_bank,
         weights,
         story_steps,
+        conversation_steps,
     )
 
 
-def assign_user_channels(users, channels, persona_categories, always_on, min_members, story_steps):
+def assign_user_channels(
+    users,
+    channels,
+    persona_categories,
+    always_on,
+    min_members,
+    story_steps,
+    conversation_steps,
+):
     category_to_channels = defaultdict(list)
     all_channel_names = []
     for channel in channels:
@@ -153,6 +202,15 @@ def assign_user_channels(users, channels, persona_categories, always_on, min_mem
         if not candidates:
             raise RuntimeError(f"story persona has no users: {step['persona_key']}")
         memberships[candidates[0]].add(step["channel_name"])
+
+    for step in conversation_steps:
+        username = step["username"]
+        if username not in memberships:
+            raise RuntimeError(f"conversation author does not exist: {username}")
+        memberships[username].add(step["channel_name"])
+        for mention in MENTION_PATTERN.findall(step["message"]):
+            if mention in memberships:
+                memberships[mention].add(step["channel_name"])
 
     channel_members = {name: set() for name in all_channel_names}
     for username, channel_names in memberships.items():
@@ -366,6 +424,32 @@ def build_story_posts(team_name, users, channel_members, message_bank, steps, se
     return posts
 
 
+def build_channel_conversation_posts(team_name, steps, now):
+    posts = []
+    local_today = now.astimezone(JST).date()
+    for step in steps:
+        hour, minute = divmod(step["minute_of_day"], 60)
+        create_at = datetime.combine(
+            local_today - timedelta(days=step["day_offset"]),
+            dt_time(hour, minute),
+            tzinfo=JST,
+        )
+        posts.append(
+            {
+                "team": team_name,
+                "channel": step["channel_name"],
+                "user": step["username"],
+                "message": step["message"],
+                "create_at": int(create_at.timestamp() * 1000),
+                "props": {
+                    "demo_conversation": step["conversation_id"],
+                    "demo_conversation_step": step["step_order"],
+                },
+            }
+        )
+    return posts
+
+
 def generate_lines(
     team,
     channels,
@@ -376,6 +460,7 @@ def generate_lines(
     message_bank,
     weights,
     story_steps,
+    conversation_steps,
     settings,
 ):
     team_name = team["name"]
@@ -457,6 +542,7 @@ def generate_lines(
             now,
         )
     )
+    posts.extend(build_channel_conversation_posts(team_name, conversation_steps, now))
 
     for post in sorted(posts, key=lambda item: item["create_at"]):
         lines.append({"type": "post", "post": post})
@@ -520,6 +606,7 @@ def main():
             message_bank,
             weights,
             story_steps,
+            conversation_steps,
         ) = load_core_data(conn)
 
         memberships, channel_members = assign_user_channels(
@@ -529,6 +616,7 @@ def main():
             always_on,
             settings.get("min_channel_members", 5),
             story_steps,
+            conversation_steps,
         )
         lines = generate_lines(
             team,
@@ -540,6 +628,7 @@ def main():
             message_bank,
             weights,
             story_steps,
+            conversation_steps,
             settings,
         )
 
@@ -548,6 +637,12 @@ def main():
 
     message_counts = Counter(post["message"] for post in posts)
     replies = sum(len(post.get("replies", [])) for post in posts)
+    conversations = {
+        post["props"]["demo_conversation"]
+        for post in posts
+        if "demo_conversation" in post["props"]
+    }
+    mention_posts = sum("@" in post["message"] for post in posts)
     print("=" * 60)
     print("Mattermost dummy data generated from SQLite")
     print("=" * 60)
@@ -556,6 +651,8 @@ def main():
     print(f"Channels      : {len(channels)}")
     print(f"Posts         : {len(posts)}")
     print(f"Replies       : {replies}")
+    print(f"Conversations : {len(conversations)}")
+    print(f"Mention roots : {mention_posts}")
     print(f"Unique roots  : {len(message_counts)}")
     print(f"Max duplicate : {max(message_counts.values())}")
     print(f"Import ZIP    : {ZIP_PATH}")
