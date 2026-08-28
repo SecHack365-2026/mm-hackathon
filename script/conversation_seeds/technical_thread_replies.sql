@@ -12,7 +12,7 @@ VALUES
     ('tech_webhook_signature', 1, 3, 'user02', 5, '受信したbyte列を保存して比較すると、改行が一つ削られていました。'),
     ('tech_webhook_signature', 1, 4, 'user15', 8, 'parse前の本文でHMACを計算するよう、処理順を入れ替えましょう。'),
     ('tech_webhook_signature', 1, 5, 'user02', 12, '修正版では正しい要求だけが通り、本文を変えた要求は拒否されます。'),
-    ('tech_webhook_signature', 1, 6, 'user15', 17, '比較は一定時間で行う関数を使っているため、実装上の差もありません。'),
+    ('tech_webhook_signature', 1, 6, 'user15', 17, '署名の比較には、処理時間が入力に依存しない関数を使っています。'),
     ('tech_webhook_signature', 1, 7, 'user02', 23, '生本文と検証結果を秘密値なしで記録し、この条件を回帰試験にします。'),
 
     ('tech_retry_backoff', 1, 1, 'user28', 1, '現在の実装では失敗直後に三回続けて要求を送っています。'),
