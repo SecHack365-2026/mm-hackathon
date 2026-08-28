@@ -18,6 +18,8 @@ mm-hackathon/
     │   ├── social_thread_replies.sql
     │   ├── technical.sql
     │   └── technical_thread_replies.sql
+    ├── profile_images/
+    │   └── profile-user01.png ... profile-user40.png
     ├── generate_mm_import.py
     ├── refresh_dummy_data.sh
     ├── refresh_dummy_data.sql
@@ -35,6 +37,7 @@ mm-hackathon/
 - 180文字以上の長文ルートを30件収録し、短い投稿にも背景・判断理由・気遣いが伝わる文面を混ぜています。
 - リアクション付きルートは687件、リアクション総数は1,912件です。
 - メンションを含むルート投稿は201件です。管理者だけでなく、ダミーユーザー同士の直接メンションも含みます。
+- ダミーユーザー40人には、日本語の姓の先頭文字を使ったプロフィール画像を設定しています。
 - メンションはBotの入力や通知一覧を試すためのインポート済み履歴です。インポート時にメールやPush通知を送信するものではありません。
 - `script/refresh_dummy_data.sh` は、基礎データと分割された会話seedを順番に適用し、現在のデモ向け状態へ戻す再実行可能な更新処理です。
 
