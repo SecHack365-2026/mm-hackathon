@@ -14,6 +14,21 @@ CREATE TABLE IF NOT EXISTS channel_conversation_steps (
     FOREIGN KEY (username) REFERENCES users(username)
 );
 
+CREATE TABLE IF NOT EXISTS channel_conversation_thread_replies (
+    conversation_id TEXT NOT NULL,
+    root_step_order INTEGER NOT NULL CHECK (root_step_order > 0),
+    reply_order INTEGER NOT NULL CHECK (reply_order > 0),
+    username TEXT NOT NULL,
+    offset_minutes INTEGER NOT NULL CHECK (offset_minutes > 0),
+    message TEXT NOT NULL CHECK (length(trim(message)) > 0),
+    PRIMARY KEY (conversation_id, root_step_order, reply_order),
+    FOREIGN KEY (conversation_id, root_step_order)
+        REFERENCES channel_conversation_steps(conversation_id, step_order)
+        ON DELETE CASCADE,
+    FOREIGN KEY (username) REFERENCES users(username)
+);
+
+DELETE FROM channel_conversation_thread_replies;
 DELETE FROM channel_conversation_steps;
 
 -- Keep the original hand-written bank and replace only this refresh's additions.
