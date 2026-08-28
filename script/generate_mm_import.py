@@ -2,6 +2,7 @@
 
 """Generate a natural-looking Mattermost bulk-import ZIP from SQLite data."""
 
+import hashlib
 import json
 import os
 import random
@@ -32,6 +33,16 @@ EMOJI_POOL = [
     "clap",
     "raised_hands",
     "rocket",
+]
+
+CURATED_REACTION_EMOJIS = [
+    "+1",
+    "eyes",
+    "thinking_face",
+    "heart",
+    "clap",
+    "tada",
+    "raised_hands",
 ]
 
 
@@ -507,9 +518,42 @@ def build_story_posts(team_name, users, channel_members, message_bank, steps, se
     return posts
 
 
-def build_channel_conversation_posts(team_name, steps, thread_replies, now):
+def add_curated_reactions(post, user_pool, now_ms):
+    digest = hashlib.sha256(
+        f"{post['props']['demo_conversation']}:{post['props']['demo_conversation_step']}".encode()
+    ).digest()
+    if digest[0] >= 192:  # Deterministically react to about 75% of curated roots.
+        return
+
+    candidates = [username for username in sorted(user_pool) if username != post["user"]]
+    if not candidates:
+        return
+
+    reaction_count = min(2 + digest[1] % 3, len(candidates))
+    chooser = random.Random(int.from_bytes(digest[:8], "big"))
+    reactors = chooser.sample(candidates, reaction_count)
+    post["reactions"] = [
+        {
+            "user": reactor,
+            "emoji_name": CURATED_REACTION_EMOJIS[
+                (digest[2 + index] + index) % len(CURATED_REACTION_EMOJIS)
+            ],
+            "create_at": min(now_ms, post["create_at"] + (index + 1) * 180_000),
+        }
+        for index, reactor in enumerate(reactors)
+    ]
+
+
+def build_channel_conversation_posts(
+    team_name,
+    steps,
+    thread_replies,
+    channel_members,
+    now,
+):
     posts = []
     local_today = now.astimezone(JST).date()
+    now_ms = int(now.timestamp() * 1000) - 60_000
     replies_by_root = defaultdict(list)
     for reply in thread_replies:
         replies_by_root[(reply["conversation_id"], reply["root_step_order"])].append(reply)
@@ -547,6 +591,7 @@ def build_channel_conversation_posts(team_name, steps, thread_replies, now):
                 }
                 for reply in replies_by_root[root_key]
             ]
+        add_curated_reactions(post, channel_members[step["channel_name"]], now_ms)
         posts.append(post)
     return posts
 
@@ -653,6 +698,7 @@ def generate_lines(
             team_name,
             conversation_steps,
             conversation_thread_replies,
+            channel_members,
             now,
         )
     )
@@ -688,9 +734,17 @@ def validate_lines(lines):
         if conversation_id:
             conversation_positions[post["channel"]][conversation_id].append(index)
 
+        reaction_users = set()
         for reaction in post.get("reactions", []):
             if reaction["user"] == post["user"]:
                 raise RuntimeError("generated post has a self-reaction")
+            if reaction["user"] in reaction_users:
+                raise RuntimeError("generated post repeats a reaction user")
+            reaction_users.add(reaction["user"])
+            if reaction["create_at"] <= post["create_at"]:
+                raise RuntimeError("generated reaction does not follow its post")
+            if reaction["create_at"] > now_ms:
+                raise RuntimeError("generated reaction has a future timestamp")
         for reply in post.get("replies", []):
             if reply["user"] == post["user"] and "demo_conversation" not in reply["props"]:
                 raise RuntimeError("generated post has a self-reply")
@@ -776,6 +830,9 @@ def main():
 
     message_counts = Counter(post["message"] for post in posts)
     replies = sum(len(post.get("replies", [])) for post in posts)
+    reacting_roots = sum(bool(post.get("reactions")) for post in posts)
+    reactions = sum(len(post.get("reactions", [])) for post in posts)
+    long_roots = sum(len(post["message"]) >= 180 for post in posts)
     conversations = {
         post["props"]["demo_conversation"]
         for post in posts
@@ -790,6 +847,9 @@ def main():
     print(f"Channels      : {len(channels)}")
     print(f"Posts         : {len(posts)}")
     print(f"Replies       : {replies}")
+    print(f"Reacting roots: {reacting_roots}")
+    print(f"Reactions     : {reactions}")
+    print(f"Long roots    : {long_roots}")
     print(f"Conversations : {len(conversations)}")
     print(f"Mention roots : {mention_posts}")
     print(f"Unique roots  : {len(message_counts)}")
