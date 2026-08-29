@@ -47,7 +47,11 @@ if [ ! -f "$INIT_FLAG" ]; then
     python3 /work/generate_mm_import.py
     IMPORT_OUTPUT="$(mmctl import process --local --bypass-upload /work/mattermost_import.zip)"
     echo "$IMPORT_OUTPUT"
-    IMPORT_JOB_ID="${IMPORT_OUTPUT##*ID: }"
+    IMPORT_JOB_ID="$(echo "$IMPORT_OUTPUT" | sed -n 's/.*ID:[[:space:]]*//p' | tail -n1)"
+    if [ -z "$IMPORT_JOB_ID" ]; then
+        echo "Failed to parse import job ID." >&2
+        exit 1
+    fi
 
     echo "Waiting for import job $IMPORT_JOB_ID..."
     for _ in $(seq 1 90); do
@@ -57,7 +61,7 @@ if [ ! -f "$INIT_FLAG" ]; then
                 echo "Import completed successfully."
                 break
                 ;;
-            error|canceled)
+            failed|error|canceled)
                 echo "Import failed with status: $IMPORT_STATUS" >&2
                 exit 1
                 ;;
