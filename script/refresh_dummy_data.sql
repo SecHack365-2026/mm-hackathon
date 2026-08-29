@@ -1,6 +1,36 @@
 PRAGMA foreign_keys = ON;
 BEGIN IMMEDIATE;
 
+CREATE TABLE IF NOT EXISTS channel_conversation_steps (
+    conversation_id TEXT NOT NULL,
+    step_order INTEGER NOT NULL CHECK (step_order > 0),
+    channel_name TEXT NOT NULL,
+    username TEXT NOT NULL,
+    day_offset INTEGER NOT NULL CHECK (day_offset BETWEEN 1 AND 20),
+    minute_of_day INTEGER NOT NULL CHECK (minute_of_day BETWEEN 0 AND 1439),
+    message TEXT NOT NULL CHECK (length(trim(message)) > 0),
+    PRIMARY KEY (conversation_id, step_order),
+    FOREIGN KEY (channel_name) REFERENCES channels(name),
+    FOREIGN KEY (username) REFERENCES users(username)
+);
+
+CREATE TABLE IF NOT EXISTS channel_conversation_thread_replies (
+    conversation_id TEXT NOT NULL,
+    root_step_order INTEGER NOT NULL CHECK (root_step_order > 0),
+    reply_order INTEGER NOT NULL CHECK (reply_order > 0),
+    username TEXT NOT NULL,
+    offset_minutes INTEGER NOT NULL CHECK (offset_minutes > 0),
+    message TEXT NOT NULL CHECK (length(trim(message)) > 0),
+    PRIMARY KEY (conversation_id, root_step_order, reply_order),
+    FOREIGN KEY (conversation_id, root_step_order)
+        REFERENCES channel_conversation_steps(conversation_id, step_order)
+        ON DELETE CASCADE,
+    FOREIGN KEY (username) REFERENCES users(username)
+);
+
+DELETE FROM channel_conversation_thread_replies;
+DELETE FROM channel_conversation_steps;
+
 -- Keep the original hand-written bank and replace only this refresh's additions.
 DELETE FROM messages WHERE id > 80;
 UPDATE sqlite_sequence SET seq = 80 WHERE name = 'messages';
@@ -228,6 +258,7 @@ END;
 
 DELETE FROM settings WHERE key IN ('base_ts', 'split_import_percent');
 INSERT OR REPLACE INTO settings(key, value_int) VALUES
+('anchor_ts', 1787907600000), -- 2026-08-28 18:00 JST
 ('history_days', 21),
 ('active_hour_start', 8),
 ('active_hour_end', 22),
@@ -260,5 +291,66 @@ WHERE name = 'sh365-fes';
 
 UPDATE users
 SET nickname = last_name || ' ' || first_name;
+
+-- Channel timeline conversations. Every step is a root post, not a thread reply.
+-- Keeping authors, order and timestamps in SQLite makes the exchanges reviewable.
+INSERT INTO channel_conversation_steps(
+    conversation_id, step_order, channel_name, username, day_offset, minute_of_day, message
+) VALUES
+('bot_api_check', 1, 'bot-dev-lab', 'user02', 2, 610, '@user07 Webhookの署名検証、失敗時のステータスまで確認できましたか？'),
+('bot_api_check', 2, 'bot-dev-lab', 'user07', 2, 614, '確認できました。署名が違う場合は処理前に401を返しています。'),
+('bot_api_check', 3, 'bot-dev-lab', 'user15', 2, 619, '@user07 同じリクエストを再送した場合の重複処理も見てほしいです。'),
+('bot_api_check', 4, 'bot-dev-lab', 'user07', 2, 626, 'イベントIDを保存して、2回目はスキップするようにしました。'),
+('bot_api_check', 5, 'bot-dev-lab', 'user02', 2, 632, '@admin01 動作確認できたので、デモ対象へ入れて大丈夫です。'),
+
+('bug_triage', 1, 'bug-reports', 'user10', 3, 805, '@user23 未読から開くと末尾へ移動する件、こちらでも再現しました。'),
+('bug_triage', 2, 'bug-reports', 'user23', 3, 811, 'ありがとうございます。チャンネル切替直後だけ発生するようです。'),
+('bug_triage', 3, 'bug-reports', 'user36', 3, 818, 'ChromeとFirefoxでは再現、Safariでは未再現でした。'),
+('bug_triage', 4, 'bug-reports', 'user23', 3, 826, '@user10 修正ブランチを出しました。確認をお願いできますか？'),
+('bug_triage', 5, 'bug-reports', 'user10', 3, 841, '修正版では再現しませんでした。チケットを確認待ちに移します。'),
+
+('demo_rehearsal', 1, 'office-events', 'user01', 1, 960, '@all 明日16時からデモの通し確認をします。参加できない方はここで教えてください。'),
+('demo_rehearsal', 2, 'office-events', 'user11', 1, 965, '前の予定があるので5分ほど遅れるかもしれません。'),
+('demo_rehearsal', 3, 'office-events', 'user02', 1, 968, '画面共有とタイムキープを担当できます。'),
+('demo_rehearsal', 4, 'office-events', 'user01', 1, 973, '助かります。説明3分、操作5分、質疑2分で一度回しましょう。'),
+('demo_rehearsal', 5, 'office-events', 'user14', 1, 980, '@admin01 最終版のデモURLだけ、開始前に確認をお願いします。'),
+
+('incident_check', 1, 'incident-response', 'user23', 5, 670, '@channel APIのエラー率が上がっています。影響範囲を確認します。'),
+('incident_check', 2, 'incident-response', 'user36', 5, 674, '書き込み系だけ増えています。読み取りは通常値です。'),
+('incident_check', 3, 'incident-response', 'user02', 5, 681, '直前リリースの差分を戻せる状態にしました。'),
+('incident_check', 4, 'incident-response', 'user23', 5, 689, '@user36 メトリクスが戻ったか、あと5分だけ監視をお願いします。'),
+('incident_check', 5, 'incident-response', 'user36', 5, 697, '通常値へ戻りました。タイムラインを記録しておきます。'),
+
+('aurora_review', 1, 'project-aurora', 'user14', 4, 840, '@user11 検索結果0件の画面、今日レビューできますか？'),
+('aurora_review', 2, 'project-aurora', 'user11', 4, 846, '15時までに比較案を2つ出します。説明文の長さも見てください。'),
+('aurora_review', 3, 'project-aurora', 'user15', 4, 854, '実データに近い件名を入れた状態も用意しておきます。'),
+('aurora_review', 4, 'project-aurora', 'user11', 4, 903, '比較案を反映しました。私は操作例が見える方を推します。'),
+('aurora_review', 5, 'project-aurora', 'user14', 4, 910, '@admin01 デモでは右側の案を使うことで決定しました。'),
+
+('lunch_chat', 1, 'town-square', 'user05', 6, 715, '今日のお昼、駅前のカレー屋に行く人いますか？'),
+('lunch_chat', 2, 'town-square', 'user12', 6, 718, '行きます。辛さは控えめにする予定です。'),
+('lunch_chat', 3, 'town-square', 'user08', 6, 721, '12時10分にロビー集合なら参加できます。'),
+('lunch_chat', 4, 'town-square', 'user05', 6, 724, 'では12時10分で。席だけ先に見てきます。'),
+
+('remote_handoff', 1, 'remote-lounge', 'user04', 7, 550, '@user29 午前の問い合わせ対応、11時から引き継げますか？'),
+('remote_handoff', 2, 'remote-lounge', 'user29', 7, 554, '大丈夫です。未回答の2件から確認します。'),
+('remote_handoff', 3, 'remote-lounge', 'user04', 7, 558, 'ありがとうございます。経緯はチケットの先頭に追記しました。'),
+('remote_handoff', 4, 'remote-lounge', 'user29', 7, 566, '@admin01 引き継ぎ完了しました。急ぎのものはありません。'),
+
+('token_help', 1, 'faq', 'user03', 2, 830, '@user02 Botトークンを発行したのですが、投稿APIが403になります。'),
+('token_help', 2, 'faq', 'user02', 2, 835, 'Botを対象チャンネルへ追加したか確認してみてください。'),
+('token_help', 3, 'faq', 'user03', 2, 839, '追加したら投稿できました。権限不足だったようです。'),
+('token_help', 4, 'faq', 'user07', 2, 844, '同じところで迷いやすいので、手順書にも追記しておきます。'),
+
+('maintenance_notice', 1, 'announcements', 'user01', 8, 1060, '@all 本日18時から検証環境を再起動します。作業中の内容は事前に保存してください。'),
+('maintenance_notice', 2, 'announcements', 'user14', 8, 1065, '停止は10分程度を予定しています。長引く場合はここで共有します。'),
+('maintenance_notice', 3, 'announcements', 'user02', 8, 1070, '再起動後のAPIヘルスチェックを担当します。'),
+('maintenance_notice', 4, 'announcements', 'user14', 8, 1078, '@admin01 復旧確認後に完了のお知らせをお願いします。'),
+
+('standup_trial', 1, 'bot-playground', 'user07', 9, 575, '@user15 `/standup` の出力を変えたので、表示を見てもらえますか？'),
+('standup_trial', 2, 'bot-playground', 'user15', 9, 579, '昨日・今日・困りごとの順で読みやすくなっています。'),
+('standup_trial', 3, 'bot-playground', 'user33', 9, 584, '項目が空の場合は「なし」と出る方が分かりやすそうです。'),
+('standup_trial', 4, 'bot-playground', 'user07', 9, 590, '対応しました。空欄のまま送った場合も確認します。'),
+('standup_trial', 5, 'bot-playground', 'user15', 9, 597, '@admin01 この形式なら当日のサンプルに使えそうです。');
 
 COMMIT;

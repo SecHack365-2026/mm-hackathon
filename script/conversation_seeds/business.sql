@@ -1,0 +1,305 @@
+PRAGMA foreign_keys = ON;
+BEGIN;
+
+DELETE FROM channel_conversation_steps
+WHERE conversation_id LIKE 'biz_%';
+
+INSERT INTO channel_conversation_steps (
+    conversation_id,
+    step_order,
+    channel_name,
+    username,
+    day_offset,
+    minute_of_day,
+    message
+) VALUES
+-- Project Aurora: release planning
+('biz_aurora_release_scope', 1, 'project-aurora', 'user01', 20, 555, '@user07 今回のリリース範囲、検索改善と通知設定までで認識は合っていますか？'),
+('biz_aurora_release_scope', 2, 'project-aurora', 'user07', 20, 562, 'はい。プロフィール画面の変更は次回へ分ける前提です。'),
+('biz_aurora_release_scope', 3, 'project-aurora', 'user14', 20, 571, '検索改善は結合試験まで終わっています。通知設定は今日中に確認します。'),
+('biz_aurora_release_scope', 4, 'project-aurora', 'user01', 20, 583, 'では、未完了なのは通知設定の確認だけとして進行表を更新します。'),
+('biz_aurora_release_scope', 5, 'project-aurora', 'user07', 20, 596, '利用者向けの変更点も二項目に絞って下書きしました。'),
+('biz_aurora_release_scope', 6, 'project-aurora', 'user14', 20, 610, '確認が終わり次第ここで報告します。予定どおり明日のリリース判定で大丈夫です。'),
+
+('biz_aurora_data_migration', 1, 'project-aurora', 'user14', 18, 610, '@user22 移行リハーサルの件数差分は解消しましたか？'),
+('biz_aurora_data_migration', 2, 'project-aurora', 'user22', 18, 618, '旧データに空欄が12件あり、補正ルールを加えたら一致しました。'),
+('biz_aurora_data_migration', 3, 'project-aurora', 'user08', 18, 627, '補正対象だけを一覧にして、サポート側でも確認できるようにします。'),
+('biz_aurora_data_migration', 4, 'project-aurora', 'user22', 18, 639, '@user08 一覧を共有しました。氏名ではなく管理番号だけにしています。'),
+('biz_aurora_data_migration', 5, 'project-aurora', 'user08', 18, 651, '確認しました。問い合わせ時の照合にも十分使えそうです。'),
+('biz_aurora_data_migration', 6, 'project-aurora', 'user14', 18, 666, 'では補正ルールを確定し、次回リハーサルでは手作業を入れずに通します。'),
+
+('biz_aurora_mobile_check', 1, 'project-aurora', 'user05', 15, 805, '@user18 モバイル表示で残っていたヘッダーの崩れ、修正版を確認できますか？'),
+('biz_aurora_mobile_check', 2, 'project-aurora', 'user18', 15, 812, '確認中です。狭い画面では直っていますが、横向きで余白が広く見えます。'),
+('biz_aurora_mobile_check', 3, 'project-aurora', 'user32', 15, 821, '横向き用の最大幅が古い値のままでした。そこも合わせて直します。'),
+('biz_aurora_mobile_check', 4, 'project-aurora', 'user18', 15, 834, '修正後は主要な三サイズで揃いました。文字の折り返しも問題ありません。'),
+('biz_aurora_mobile_check', 5, 'project-aurora', 'user05', 15, 846, 'ありがとうございます。確認端末と結果を試験表へ追記しました。'),
+('biz_aurora_mobile_check', 6, 'project-aurora', 'user32', 15, 858, '差分を整理してレビュー依頼を出します。今日の確認対象はこれで完了です。'),
+
+('biz_aurora_metrics_review', 1, 'project-aurora', 'user12', 12, 650, '@user26 試験公開後の利用状況、朝会で見る指標を三つに絞れますか？'),
+('biz_aurora_metrics_review', 2, 'project-aurora', 'user26', 12, 659, '利用開始率、検索成功率、翌日再訪率の三つを提案します。'),
+('biz_aurora_metrics_review', 3, 'project-aurora', 'user35', 12, 670, '検索成功率は結果クリックまで含める定義でよいでしょうか。'),
+('biz_aurora_metrics_review', 4, 'project-aurora', 'user26', 12, 682, '@user35 はい。結果表示だけでは成功扱いにしない定義です。'),
+('biz_aurora_metrics_review', 5, 'project-aurora', 'user12', 12, 696, '定義が分かる注記を表の下に追加しておきます。'),
+('biz_aurora_metrics_review', 6, 'project-aurora', 'user35', 12, 711, '集計を更新しました。明日から同じ条件で推移を比較できます。'),
+
+('biz_aurora_launch_decision', 1, 'project-aurora', 'user03', 9, 960, '@user14 リリース判定に必要な確認項目はすべて揃いましたか？'),
+('biz_aurora_launch_decision', 2, 'project-aurora', 'user14', 9, 967, '性能試験と復旧手順は完了、問い合わせ導線だけ最終確認中です。'),
+('biz_aurora_launch_decision', 3, 'project-aurora', 'user08', 9, 976, '問い合わせフォームから担当チャンネルまでの通知を確認しました。'),
+('biz_aurora_launch_decision', 4, 'project-aurora', 'user03', 9, 988, '懸念が解消したので、予定どおり明朝の公開で進めます。'),
+('biz_aurora_launch_decision', 5, 'project-aurora', 'user14', 9, 999, '公開後30分は私が監視し、異常時は切り戻し判断を共有します。'),
+('biz_aurora_launch_decision', 6, 'project-aurora', 'user08', 9, 1013, 'サポート側も同じ時間帯で待機します。案内文は予約済みです。'),
+
+-- Project Phoenix: delivery and quality
+('biz_phoenix_sprint_plan', 1, 'project-phoenix', 'user02', 19, 570, '@user15 次の期間は認証改善を優先したいです。作業量を確認できますか？'),
+('biz_phoenix_sprint_plan', 2, 'project-phoenix', 'user15', 19, 578, '主要部分で五日、回帰試験に二日を見込んでいます。'),
+('biz_phoenix_sprint_plan', 3, 'project-phoenix', 'user23', 19, 587, '画面側は並行できますが、エラー文言の確定を先にお願いします。'),
+('biz_phoenix_sprint_plan', 4, 'project-phoenix', 'user02', 19, 599, '@user23 今日中に文言案を整理します。先に通常系から着手してください。'),
+('biz_phoenix_sprint_plan', 5, 'project-phoenix', 'user15', 19, 613, '依存関係を反映して作業表を更新しました。余裕日は一日あります。'),
+('biz_phoenix_sprint_plan', 6, 'project-phoenix', 'user23', 19, 628, '確認しました。通常系の画面実装から始めます。'),
+
+('biz_phoenix_accessibility', 1, 'project-phoenix', 'user11', 17, 780, '@user31 キーボード操作の確認で、モーダルを閉じた後の位置がずれます。'),
+('biz_phoenix_accessibility', 2, 'project-phoenix', 'user31', 17, 788, '再現しました。閉じる前のボタンではなくページ先頭へ戻っています。'),
+('biz_phoenix_accessibility', 3, 'project-phoenix', 'user17', 17, 797, '共通部品の設定なので、他の三画面にも影響がありそうです。'),
+('biz_phoenix_accessibility', 4, 'project-phoenix', 'user31', 17, 810, '呼び出し元を記録して、閉じた後に戻す修正を入れました。'),
+('biz_phoenix_accessibility', 5, 'project-phoenix', 'user11', 17, 823, '四画面とも期待した位置へ戻ることを確認しました。'),
+('biz_phoenix_accessibility', 6, 'project-phoenix', 'user17', 17, 837, '試験項目に画面読み上げ時の確認も追加して完了にします。'),
+
+('biz_phoenix_api_contract', 1, 'project-phoenix', 'user06', 14, 635, '@user28 注文一覧APIの項目追加、画面側へ影響はありますか？'),
+('biz_phoenix_api_contract', 2, 'project-phoenix', 'user28', 14, 643, '追加項目なので既存表示には影響しません。新しい状態表示で利用します。'),
+('biz_phoenix_api_contract', 3, 'project-phoenix', 'user33', 14, 652, '未設定時は空文字ではなく項目自体が省略される理解で合っていますか？'),
+('biz_phoenix_api_contract', 4, 'project-phoenix', 'user06', 14, 664, '@user33 はい。仕様書にも省略可能と追記しました。'),
+('biz_phoenix_api_contract', 5, 'project-phoenix', 'user28', 14, 677, '画面側で両方の応答を確認し、問題なく表示できました。'),
+('biz_phoenix_api_contract', 6, 'project-phoenix', 'user06', 14, 691, '契約試験も更新済みです。この変更は次の版へ含めます。'),
+
+('biz_phoenix_incident_drill', 1, 'project-phoenix', 'user19', 11, 870, '@user37 障害対応訓練の開始条件を確認してもらえますか？'),
+('biz_phoenix_incident_drill', 2, 'project-phoenix', 'user37', 11, 879, '監視通知を受けた担当が事象を宣言した時点を開始とします。'),
+('biz_phoenix_incident_drill', 3, 'project-phoenix', 'user25', 11, 889, '利用者への第一報は開始から15分以内という想定ですね。'),
+('biz_phoenix_incident_drill', 4, 'project-phoenix', 'user37', 11, 902, 'はい。原因が不明でも、影響範囲と次回更新時刻を先に伝えます。'),
+('biz_phoenix_incident_drill', 5, 'project-phoenix', 'user19', 11, 915, '役割表を更新しました。記録係は判断時刻も残してください。'),
+('biz_phoenix_incident_drill', 6, 'project-phoenix', 'user25', 11, 930, '了解しました。明日の訓練では案内文の作成まで通して確認します。'),
+
+('biz_phoenix_retrospective', 1, 'project-phoenix', 'user09', 7, 1020, '@user21 今回の振り返りで、最初に扱う論点を決めましょう。'),
+('biz_phoenix_retrospective', 2, 'project-phoenix', 'user21', 7, 1028, 'レビュー待ちが集中した点を扱いたいです。後半に二日遅れました。'),
+('biz_phoenix_retrospective', 3, 'project-phoenix', 'user34', 7, 1037, '依頼時点で確認観点が揃っていない案件が多かったと思います。'),
+('biz_phoenix_retrospective', 4, 'project-phoenix', 'user09', 7, 1049, '@user34 次回から依頼用の確認欄を必須にする案でどうでしょう。'),
+('biz_phoenix_retrospective', 5, 'project-phoenix', 'user21', 7, 1062, '賛成です。担当者も前日に割り当てると偏りを減らせそうです。'),
+('biz_phoenix_retrospective', 6, 'project-phoenix', 'user34', 7, 1076, '二つを改善策として記録しました。次の期間で効果を確認します。'),
+
+-- Sales and deal coordination
+('biz_sales_discovery', 1, 'sales-deals', 'user04', 20, 620, '@user20 明日の初回打ち合わせ、先方の課題を整理できていますか？'),
+('biz_sales_discovery', 2, 'sales-deals', 'user20', 20, 628, '申請作業の重複と、進捗が見えない点を特に気にされています。'),
+('biz_sales_discovery', 3, 'sales-deals', 'user30', 20, 637, '現状の流れを聞いてから、通知機能の例を見せる順番がよさそうです。'),
+('biz_sales_discovery', 4, 'sales-deals', 'user04', 20, 649, '@user30 デモは五分に絞り、先方の運用を聞く時間を多めにします。'),
+('biz_sales_discovery', 5, 'sales-deals', 'user20', 20, 662, '質問項目を共有しました。利用人数と承認段階も確認します。'),
+('biz_sales_discovery', 6, 'sales-deals', 'user04', 20, 676, 'ありがとうございます。役割分担も決まったので、この内容で準備完了です。'),
+
+('biz_sales_proposal_revision', 1, 'sales-deals', 'user10', 16, 700, '@user27 提案書の費用対効果のページ、前提を見直せますか？'),
+('biz_sales_proposal_revision', 2, 'sales-deals', 'user27', 16, 708, '削減時間を一律ではなく、担当業務ごとに分けて再計算します。'),
+('biz_sales_proposal_revision', 3, 'sales-deals', 'user16', 16, 717, '導入初月は習熟期間として効果を半分に置くと現実的です。'),
+('biz_sales_proposal_revision', 4, 'sales-deals', 'user27', 16, 730, 'その前提を反映しました。回収時期は一か月後ろになります。'),
+('biz_sales_proposal_revision', 5, 'sales-deals', 'user10', 16, 743, '数字の根拠が明確になりました。注記を残してこの案を使いましょう。'),
+('biz_sales_proposal_revision', 6, 'sales-deals', 'user16', 16, 757, '説明用のグラフも同じ数値へ更新しました。'),
+
+('biz_sales_security_answers', 1, 'sales-deals', 'user13', 13, 795, '@user36 先方から届いた安全管理の質問、回答状況を確認したいです。'),
+('biz_sales_security_answers', 2, 'sales-deals', 'user36', 13, 803, '認証と監査記録は回答済みで、データ保管期間だけ確認中です。'),
+('biz_sales_security_answers', 3, 'sales-deals', 'user24', 13, 812, '保管期間は契約終了後の削除手順と合わせて説明した方がよさそうです。'),
+('biz_sales_security_answers', 4, 'sales-deals', 'user36', 13, 825, '@user24 運用担当と確認し、標準期間と削除申請の流れを追記しました。'),
+('biz_sales_security_answers', 5, 'sales-deals', 'user13', 13, 838, '回答を確認しました。断定できない項目も条件が明記されています。'),
+('biz_sales_security_answers', 6, 'sales-deals', 'user36', 13, 852, '最終版としてまとめました。明日の午前中に先方へ回答できます。'),
+
+('biz_sales_trial_followup', 1, 'sales-deals', 'user20', 10, 645, '@user04 試用一週目の反応、次回の確認事項を相談させてください。'),
+('biz_sales_trial_followup', 2, 'sales-deals', 'user04', 10, 653, '現場では検索が好評ですが、管理者は権限設定に迷っているようです。'),
+('biz_sales_trial_followup', 3, 'sales-deals', 'user30', 10, 662, '次回は権限の雛形を見せて、実際の役割に合わせてみましょう。'),
+('biz_sales_trial_followup', 4, 'sales-deals', 'user20', 10, 674, '利用記録も確認し、使われていない機能は説明を減らします。'),
+('biz_sales_trial_followup', 5, 'sales-deals', 'user04', 10, 687, '質問を三点に整理しました。先方にも事前共有しておきます。'),
+('biz_sales_trial_followup', 6, 'sales-deals', 'user30', 10, 701, '権限の雛形を準備しました。次回は操作しながら確認できます。'),
+
+('biz_sales_handoff', 1, 'sales-deals', 'user25', 6, 930, '@user08 契約後の引き継ぎに必要な情報を確認してください。'),
+('biz_sales_handoff', 2, 'sales-deals', 'user08', 6, 938, '利用部門、開始希望日、管理担当者は揃っています。'),
+('biz_sales_handoff', 3, 'sales-deals', 'user39', 6, 947, '初回説明会の参加人数と、質問窓口も決めておきたいです。'),
+('biz_sales_handoff', 4, 'sales-deals', 'user25', 6, 959, '@user39 参加は12名、質問窓口は管理担当者経由と確認できました。'),
+('biz_sales_handoff', 5, 'sales-deals', 'user08', 6, 972, '導入計画へ反映しました。開始前日に接続確認を入れます。'),
+('biz_sales_handoff', 6, 'sales-deals', 'user39', 6, 986, '案内文も用意できました。引き継ぎ資料はこれで完成です。'),
+
+-- Customer success operations
+('biz_cs_onboarding', 1, 'customer-success', 'user08', 19, 600, '@user39 新規利用チームの初回説明、どこで詰まりましたか？'),
+('biz_cs_onboarding', 2, 'customer-success', 'user39', 19, 608, '招待後のチャンネル選択で迷う方が多かったです。'),
+('biz_cs_onboarding', 3, 'customer-success', 'user24', 19, 617, '最初に参加する三つを案内画面へ固定表示すると分かりやすそうです。'),
+('biz_cs_onboarding', 4, 'customer-success', 'user08', 19, 629, '@user24 提案を手順書へ入れました。画面例も一枚追加します。'),
+('biz_cs_onboarding', 5, 'customer-success', 'user39', 19, 642, '次回は説明の順番も入れ替えて、開始までの時間を測ります。'),
+('biz_cs_onboarding', 6, 'customer-success', 'user08', 19, 656, '改善後の結果を同じ記録表へ残してください。比較できる形にします。'),
+
+('biz_cs_slow_response', 1, 'customer-success', 'user18', 16, 840, '@user37 画面が遅いという問い合わせ、再現条件は分かりましたか？'),
+('biz_cs_slow_response', 2, 'customer-success', 'user37', 16, 848, '一覧を半年分表示し、複数条件で絞ると待ち時間が長くなります。'),
+('biz_cs_slow_response', 3, 'customer-success', 'user06', 16, 857, '同じ条件で計測したところ、初回だけ四秒ほどかかっています。'),
+('biz_cs_slow_response', 4, 'customer-success', 'user37', 16, 870, '二回目は一秒以内でした。初回取得の処理を調べます。'),
+('biz_cs_slow_response', 5, 'customer-success', 'user18', 16, 883, '利用者には調査中と伝え、期間を短くする回避策も案内しました。'),
+('biz_cs_slow_response', 6, 'customer-success', 'user06', 16, 897, '記録を添えて改善候補を登録しました。明日の確認会で優先度を決めます。'),
+
+('biz_cs_usage_review', 1, 'customer-success', 'user29', 13, 660, '@user12 月次利用レビューの要点を確認してもらえますか？'),
+('biz_cs_usage_review', 2, 'customer-success', 'user12', 13, 668, '利用者数は増えていますが、共有機能の利用が横ばいです。'),
+('biz_cs_usage_review', 3, 'customer-success', 'user40', 13, 677, '共有先を選ぶ操作が分かりにくいという声が二件ありました。'),
+('biz_cs_usage_review', 4, 'customer-success', 'user12', 13, 689, '@user40 次回説明会で短い実演を入れ、利用後の変化を見ましょう。'),
+('biz_cs_usage_review', 5, 'customer-success', 'user29', 13, 702, '実演用の例を用意します。指標は共有実行人数で追います。'),
+('biz_cs_usage_review', 6, 'customer-success', 'user40', 13, 716, '問い合わせ内容も分類して、操作上の迷いが減るか確認します。'),
+
+('biz_cs_feedback_route', 1, 'customer-success', 'user22', 9, 765, '@user05 改善要望の受け渡しで、優先度が抜けることがあります。'),
+('biz_cs_feedback_route', 2, 'customer-success', 'user05', 9, 773, '受付時に影響人数と回避策の有無を必須にしましょう。'),
+('biz_cs_feedback_route', 3, 'customer-success', 'user33', 9, 782, '開発側では再現手順があると判断が早くなります。'),
+('biz_cs_feedback_route', 4, 'customer-success', 'user22', 9, 794, '三項目を受付票へ追加しました。過去分は重要なものだけ補います。'),
+('biz_cs_feedback_route', 5, 'customer-success', 'user05', 9, 807, '次回から週二回まとめて確認する時間も設定します。'),
+('biz_cs_feedback_route', 6, 'customer-success', 'user33', 9, 821, '受け渡し先が明確になりました。まず二週間この運用で試します。'),
+
+('biz_cs_renewal_risk', 1, 'customer-success', 'user15', 5, 915, '@user29 更新前のお客様で利用が減っている理由は確認できましたか？'),
+('biz_cs_renewal_risk', 2, 'customer-success', 'user29', 5, 923, '担当変更後に定例確認が止まり、質問が残ったままになっていました。'),
+('biz_cs_renewal_risk', 3, 'customer-success', 'user40', 5, 932, '新しい担当者向けに、現在の設定と未解決事項を一度整理しましょう。'),
+('biz_cs_renewal_risk', 4, 'customer-success', 'user29', 5, 944, '@user40 整理表を作りました。先方との確認会も来週で調整中です。'),
+('biz_cs_renewal_risk', 5, 'customer-success', 'user15', 5, 957, '確認会では今後使いたい業務も聞き、支援内容を組み直します。'),
+('biz_cs_renewal_risk', 6, 'customer-success', 'user40', 5, 971, '事前質問を送付しました。回答を受けて当日の進め方を決めます。'),
+
+-- Design reviews
+('biz_design_empty_state', 1, 'design-review', 'user05', 18, 630, '@user11 検索結果がゼロ件の画面、文言案を確認してください。'),
+('biz_design_empty_state', 2, 'design-review', 'user11', 18, 638, '原因の説明より、次に試せる操作を先に出したいです。'),
+('biz_design_empty_state', 3, 'design-review', 'user31', 18, 647, '条件を減らすボタンと、条件をすべて戻すリンクを置く案です。'),
+('biz_design_empty_state', 4, 'design-review', 'user05', 18, 659, '@user31 二つの操作が競合しないよう、主要ボタンは一つにしましょう。'),
+('biz_design_empty_state', 5, 'design-review', 'user11', 18, 672, '条件を減らす方を主要にして、全解除は文中リンクに直しました。'),
+('biz_design_empty_state', 6, 'design-review', 'user05', 18, 686, '意図が分かりやすくなりました。この案で利用確認へ進めます。'),
+
+('biz_design_form_labels', 1, 'design-review', 'user18', 15, 750, '@user32 申請フォームの任意項目が見分けにくいという指摘がありました。'),
+('biz_design_form_labels', 2, 'design-review', 'user32', 15, 758, '必須だけ印を付ける現状では、途中で不安になるようです。'),
+('biz_design_form_labels', 3, 'design-review', 'user11', 15, 767, '各項目に必須か任意かを文字で示す方が迷いにくいと思います。'),
+('biz_design_form_labels', 4, 'design-review', 'user32', 15, 780, '表示を試作しました。長い項目名でも折り返さず収まります。'),
+('biz_design_form_labels', 5, 'design-review', 'user18', 15, 793, '読み上げでも状態が伝わることを確認しました。'),
+('biz_design_form_labels', 6, 'design-review', 'user11', 15, 807, 'では全フォーム共通の表記として部品一覧へ反映します。'),
+
+('biz_design_dashboard_density', 1, 'design-review', 'user27', 12, 825, '@user38 管理画面のカードが多く、重要な数値を見つけにくいです。'),
+('biz_design_dashboard_density', 2, 'design-review', 'user38', 12, 833, '毎日見る三指標を上段にまとめ、補助情報は表へ移す案を作ります。'),
+('biz_design_dashboard_density', 3, 'design-review', 'user16', 12, 842, '担当者は未処理件数を最初に見るので、左端がよさそうです。'),
+('biz_design_dashboard_density', 4, 'design-review', 'user38', 12, 854, '@user16 その順序で組み替えました。色は異常時だけ使っています。'),
+('biz_design_dashboard_density', 5, 'design-review', 'user27', 12, 867, '視線の流れが自然になりました。補助情報も比較しやすいです。'),
+('biz_design_dashboard_density', 6, 'design-review', 'user38', 12, 881, '余白を微調整して、次の確認会へ出せる状態にします。'),
+
+('biz_design_confirmation', 1, 'design-review', 'user31', 8, 690, '@user05 削除確認の画面で、対象名を出すべきでしょうか？'),
+('biz_design_confirmation', 2, 'design-review', 'user05', 8, 698, '誤操作を防ぐため、対象名と影響件数の両方を表示したいです。'),
+('biz_design_confirmation', 3, 'design-review', 'user18', 8, 707, '件数の取得に時間がかかる場合の表示も決めておきましょう。'),
+('biz_design_confirmation', 4, 'design-review', 'user31', 8, 719, '取得中は削除ボタンを無効にし、完了後に押せるようにしました。'),
+('biz_design_confirmation', 5, 'design-review', 'user05', 8, 732, '待っている理由が分かる説明も追加してください。'),
+('biz_design_confirmation', 6, 'design-review', 'user31', 8, 746, '短い説明を加えました。失敗時は再取得できる構成です。'),
+
+('biz_design_mobile_navigation', 1, 'design-review', 'user38', 4, 880, '@user27 モバイルの下部メニュー、項目を四つに減らした案です。'),
+('biz_design_mobile_navigation', 2, 'design-review', 'user27', 4, 888, '利用頻度の低い設定を個人メニューへ移した形ですね。'),
+('biz_design_mobile_navigation', 3, 'design-review', 'user16', 4, 897, '通知は頻度が高いので、今の位置を維持してほしいです。'),
+('biz_design_mobile_navigation', 4, 'design-review', 'user38', 4, 909, '@user16 通知は残し、履歴を一覧画面内へ移しました。'),
+('biz_design_mobile_navigation', 5, 'design-review', 'user27', 4, 922, '主要操作が片手で届く範囲に収まりました。'),
+('biz_design_mobile_navigation', 6, 'design-review', 'user38', 4, 936, '五人で操作確認を行い、迷った箇所を記録します。'),
+
+-- Weekly reporting
+('biz_weekly_engineering', 1, 'weekly-report', 'user02', 17, 990, '@user06 今週の開発進捗、共有用に要点をまとめましょう。'),
+('biz_weekly_engineering', 2, 'weekly-report', 'user06', 17, 998, '検索改善を完了し、認証改善は設計確認まで進みました。'),
+('biz_weekly_engineering', 3, 'weekly-report', 'user23', 17, 1007, '画面側は予定どおりです。来週は異常系の表示を実装します。'),
+('biz_weekly_engineering', 4, 'weekly-report', 'user02', 17, 1019, '@user23 認証側の完了を待つ項目だけ、依存として明記してください。'),
+('biz_weekly_engineering', 5, 'weekly-report', 'user06', 17, 1032, '課題欄に追記しました。現時点で日程への影響はありません。'),
+('biz_weekly_engineering', 6, 'weekly-report', 'user02', 17, 1046, 'ありがとうございます。この内容で全体報告へ載せます。'),
+
+('biz_weekly_support', 1, 'weekly-report', 'user08', 14, 975, '@user24 今週の問い合わせ傾向で共有すべき点はありますか？'),
+('biz_weekly_support', 2, 'weekly-report', 'user24', 14, 983, '招待手順が四件、権限設定が三件で、どちらも初回利用時でした。'),
+('biz_weekly_support', 3, 'weekly-report', 'user39', 14, 992, '案内ページを見ずに操作した方が多く、導線にも課題があります。'),
+('biz_weekly_support', 4, 'weekly-report', 'user08', 14, 1004, '来週は招待完了画面から案内へ進める変更を試します。'),
+('biz_weekly_support', 5, 'weekly-report', 'user24', 14, 1017, '回答用の短い手順も更新し、対応時間を比較します。'),
+('biz_weekly_support', 6, 'weekly-report', 'user39', 14, 1031, '問い合わせ件数と解決時間を記録する欄を追加しました。'),
+
+('biz_weekly_business', 1, 'weekly-report', 'user04', 10, 1005, '@user20 商談状況の週次報告、変化があった案件を確認します。'),
+('biz_weekly_business', 2, 'weekly-report', 'user20', 10, 1013, '試用中の二社が継続検討へ進み、一社は要件確認待ちです。'),
+('biz_weekly_business', 3, 'weekly-report', 'user30', 10, 1022, '要件確認待ちは安全管理の回答が揃えば次へ進める見込みです。'),
+('biz_weekly_business', 4, 'weekly-report', 'user04', 10, 1034, '@user30 回答予定日を報告へ入れて、停滞理由が分かるようにしましょう。'),
+('biz_weekly_business', 5, 'weekly-report', 'user20', 10, 1047, '反映しました。来週は試用後の評価面談が二件あります。'),
+('biz_weekly_business', 6, 'weekly-report', 'user04', 10, 1061, '数字と次の行動が揃いました。この内容で確定します。'),
+
+('biz_weekly_risk', 1, 'weekly-report', 'user19', 6, 1025, '@user37 今週のリスク欄、優先して共有するものはどれですか？'),
+('biz_weekly_risk', 2, 'weekly-report', 'user37', 6, 1033, '外部連携の試験日が未確定な点を最優先にしたいです。'),
+('biz_weekly_risk', 3, 'weekly-report', 'user13', 6, 1042, '試験が一週間遅れると、受け入れ期間が二日短くなります。'),
+('biz_weekly_risk', 4, 'weekly-report', 'user37', 6, 1054, '代替として模擬環境で先に確認できる項目を分けました。'),
+('biz_weekly_risk', 5, 'weekly-report', 'user19', 6, 1067, '影響と回避策を併記しましょう。判断期限は火曜です。'),
+('biz_weekly_risk', 6, 'weekly-report', 'user13', 6, 1081, '報告へ反映しました。進展がなければ火曜午前に再確認します。'),
+
+-- Procurement and administration
+('biz_procurement_laptops', 1, 'procurement', 'user21', 16, 580, '@user34 開発用端末の追加購入、必要台数は確定しましたか？'),
+('biz_procurement_laptops', 2, 'procurement', 'user34', 16, 588, '新規参加者用が四台、故障交換用が一台で合計五台です。'),
+('biz_procurement_laptops', 3, 'procurement', 'user09', 16, 597, '同じ構成なら保守手続きもまとめられるか確認します。'),
+('biz_procurement_laptops', 4, 'procurement', 'user34', 16, 609, '@user09 納期は在庫品で一週間、構成変更すると三週間とのことです。'),
+('biz_procurement_laptops', 5, 'procurement', 'user21', 16, 622, '今回は在庫構成で要件を満たすため、そちらで申請します。'),
+('biz_procurement_laptops', 6, 'procurement', 'user09', 16, 636, '見積内容を確認しました。保守を含めて申請へ回せます。'),
+
+('biz_procurement_room', 1, 'procurement', 'user40', 12, 720, '@user25 来週の研修会場、必要な備品を確認させてください。'),
+('biz_procurement_room', 2, 'procurement', 'user25', 12, 728, '外部画面が二台、電源タップが六本、予備の接続器が必要です。'),
+('biz_procurement_room', 3, 'procurement', 'user17', 12, 737, '会場備品で画面一台と電源タップ四本は用意できます。'),
+('biz_procurement_room', 4, 'procurement', 'user25', 12, 749, '不足分だけ手配すればよさそうです。接続端子の種類も共有します。'),
+('biz_procurement_room', 5, 'procurement', 'user40', 12, 762, '持ち込み品の一覧を更新しました。前日に動作確認を行います。'),
+('biz_procurement_room', 6, 'procurement', 'user17', 12, 776, '会場の入室時刻も確定しました。準備時間は一時間取れます。'),
+
+('biz_procurement_subscription', 1, 'procurement', 'user26', 8, 810, '@user13 分析サービスの更新申請、利用状況を確認できますか？'),
+('biz_procurement_subscription', 2, 'procurement', 'user13', 8, 818, '契約枠の八割を利用しており、三つのチームが毎週使っています。'),
+('biz_procurement_subscription', 3, 'procurement', 'user35', 8, 827, '使われていない追加機能を外すと費用を抑えられます。'),
+('biz_procurement_subscription', 4, 'procurement', 'user13', 8, 839, '@user35 標準機能だけの見積もりを依頼しました。運用への影響はありません。'),
+('biz_procurement_subscription', 5, 'procurement', 'user26', 8, 852, '更新理由に利用頻度と削減内容を記載しておきます。'),
+('biz_procurement_subscription', 6, 'procurement', 'user35', 8, 866, '新しい見積もりが届きました。前年度より費用を抑えられます。'),
+
+('biz_procurement_delivery', 1, 'procurement', 'user17', 3, 900, '@user21 注文した機材の納品、検品担当を決めたいです。'),
+('biz_procurement_delivery', 2, 'procurement', 'user21', 3, 908, '私が数量と外観を確認し、技術確認は担当チームへお願いします。'),
+('biz_procurement_delivery', 3, 'procurement', 'user34', 3, 917, '到着予定は午後です。保管場所を午前中に空けておきます。'),
+('biz_procurement_delivery', 4, 'procurement', 'user17', 3, 929, '納品書と注文内容を照合する表を用意しました。'),
+('biz_procurement_delivery', 5, 'procurement', 'user21', 3, 942, '不足や破損があれば写真ではなく管理番号と状態を記録します。'),
+('biz_procurement_delivery', 6, 'procurement', 'user34', 3, 956, '受け取り場所を共有しました。到着後にここで連絡します。'),
+
+-- Announcements coordination
+('biz_announce_maintenance', 1, 'announcements', 'user01', 15, 540, '@user19 来週の保守案内、影響時間は確定しましたか？'),
+('biz_announce_maintenance', 2, 'announcements', 'user19', 15, 548, '水曜の19時から20時で、接続できない時間は最大10分です。'),
+('biz_announce_maintenance', 3, 'announcements', 'user22', 15, 557, '利用者向けには、作業時間と停止見込みを分けて書きます。'),
+('biz_announce_maintenance', 4, 'announcements', 'user01', 15, 569, '@user22 影響を受ける機能も二点追記してください。'),
+('biz_announce_maintenance', 5, 'announcements', 'user19', 15, 582, '作業後の確認時刻も入れました。問題時は続報を出します。'),
+('biz_announce_maintenance', 6, 'announcements', 'user22', 15, 596, '案内文を予約しました。前日にも短い再案内を出します。'),
+
+('biz_announce_training', 1, 'announcements', 'user11', 11, 570, '@user40 来月の社内研修、申込案内の内容を確認してください。'),
+('biz_announce_training', 2, 'announcements', 'user40', 11, 578, '対象者、開催時間、準備物は記載済みです。'),
+('biz_announce_training', 3, 'announcements', 'user28', 11, 587, '録画の有無と、欠席者向け資料の扱いもあると助かります。'),
+('biz_announce_training', 4, 'announcements', 'user40', 11, 599, '録画は行わず、説明資料だけ後日共有すると追記しました。'),
+('biz_announce_training', 5, 'announcements', 'user11', 11, 612, '申込締切を開催三日前に設定し、定員も明記しましょう。'),
+('biz_announce_training', 6, 'announcements', 'user28', 11, 626, '追記を確認しました。質問先も分かりやすくなっています。'),
+
+('biz_announce_policy', 1, 'announcements', 'user03', 7, 600, '@user10 申請ルール変更のお知らせ、適用日は問題ないですか？'),
+('biz_announce_policy', 2, 'announcements', 'user10', 7, 608, '月初から適用し、前月中の申請には旧ルールを使います。'),
+('biz_announce_policy', 3, 'announcements', 'user29', 7, 617, '申請途中のものがどちらになるか、例を一つ入れてほしいです。'),
+('biz_announce_policy', 4, 'announcements', 'user10', 7, 629, '@user29 保存日ではなく提出日で判断する例を追加しました。'),
+('biz_announce_policy', 5, 'announcements', 'user03', 7, 642, '変更点が伝わります。旧手順の掲載終了日も添えましょう。'),
+('biz_announce_policy', 6, 'announcements', 'user10', 7, 656, '掲載終了日を追記し、公開予約まで完了しました。'),
+
+('biz_announce_office', 1, 'announcements', 'user17', 2, 630, '@user34 執務室の設備点検、周知範囲を確認したいです。'),
+('biz_announce_office', 2, 'announcements', 'user34', 2, 638, '対象階の利用者全員と、当日の来訪予定者へ案内します。'),
+('biz_announce_office', 3, 'announcements', 'user40', 2, 647, '点検中も会議室は使えますが、一部の電源が停止します。'),
+('biz_announce_office', 4, 'announcements', 'user17', 2, 659, '停止する区画を図ではなく部屋番号で明記します。'),
+('biz_announce_office', 5, 'announcements', 'user34', 2, 672, '代替の作業場所も確保しました。必要な方は総務へ連絡してください。'),
+('biz_announce_office', 6, 'announcements', 'user40', 2, 686, '案内を確認しました。本日中に対象者へ送ります。'),
+
+-- FAQ improvements
+('biz_faq_password_reset', 1, 'faq', 'user24', 14, 690, '@user15 パスワード再設定の質問が増えたので、回答を見直したいです。'),
+('biz_faq_password_reset', 2, 'faq', 'user15', 14, 698, '再設定メールが届かない場合の確認順序が不足しています。'),
+('biz_faq_password_reset', 3, 'faq', 'user39', 14, 707, '迷惑メール、登録アドレス、再送間隔の順に案内するとよさそうです。'),
+('biz_faq_password_reset', 4, 'faq', 'user15', 14, 719, '@user39 その順序で追記し、何度も連続送信しない注意も入れました。'),
+('biz_faq_password_reset', 5, 'faq', 'user24', 14, 732, '解決しない場合に伝えてほしい情報も三点に絞ります。'),
+('biz_faq_password_reset', 6, 'faq', 'user39', 14, 746, '端末、発生時刻、表示内容を案内へ追加しました。'),
+
+('biz_faq_notifications', 1, 'faq', 'user07', 9, 735, '@user29 通知が多いという質問への回答、設定例を加えませんか？'),
+('biz_faq_notifications', 2, 'faq', 'user29', 9, 743, 'すべて切るのではなく、個人宛てだけ残す例が分かりやすいです。'),
+('biz_faq_notifications', 3, 'faq', 'user12', 9, 752, 'パソコンと携帯で設定箇所が異なる点も注意が必要です。'),
+('biz_faq_notifications', 4, 'faq', 'user29', 9, 764, '二つの画面を分けて手順を書きました。初期値も記載しています。'),
+('biz_faq_notifications', 5, 'faq', 'user07', 9, 777, '緊急連絡を受け取れる設定例を先に載せましょう。'),
+('biz_faq_notifications', 6, 'faq', 'user12', 9, 791, '順番を入れ替えました。目的別に選べる回答になっています。'),
+
+('biz_faq_channel_search', 1, 'faq', 'user32', 4, 780, '@user18 過去の投稿を探す方法について、検索例を追加したいです。'),
+('biz_faq_channel_search', 2, 'faq', 'user18', 4, 788, 'チャンネル指定と投稿者指定を一つずつ紹介しましょう。'),
+('biz_faq_channel_search', 3, 'faq', 'user05', 4, 797, '日付まで絞る例があると、長く使っている方にも役立ちます。'),
+('biz_faq_channel_search', 4, 'faq', 'user18', 4, 809, '@user05 三条件を組み合わせた例も最後に追加しました。'),
+('biz_faq_channel_search', 5, 'faq', 'user32', 4, 822, '検索語を置き換えやすいよう、例の説明を短く整えました。'),
+('biz_faq_channel_search', 6, 'faq', 'user05', 4, 836, '実際の画面で同じ結果になることを確認しました。これで公開できます。');
+
+COMMIT;

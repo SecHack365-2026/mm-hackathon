@@ -5,6 +5,7 @@
 import json
 import os
 import random
+import re
 import sqlite3
 import time
 import zipfile
@@ -15,8 +16,9 @@ from datetime import datetime, time as dt_time, timedelta, timezone
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(OUT_DIR, "mm_data.db")
 ZIP_PATH = os.path.join(OUT_DIR, "mattermost_import.zip")
-TEMP_JSONL_PATH = os.path.join(OUT_DIR, "import.jsonl")
 JST = timezone(timedelta(hours=9))
+MENTION_PATTERN = re.compile(r"(?<![\w@])@([A-Za-z0-9_-]+)")
+SPECIAL_MENTIONS = {"all", "channel", "here"}
 
 EMOJI_POOL = [
     "+1",
@@ -49,6 +51,8 @@ def ensure_db_ready(conn):
         "messages",
         "channel_weights",
         "story_steps",
+        "channel_conversation_steps",
+        "channel_conversation_thread_replies",
         "settings",
         "personas",
     }
@@ -109,6 +113,80 @@ def load_core_data(conn):
         """,
     )
 
+    conversation_steps = fetchall_dict(
+        conn,
+        """
+        SELECT conversation_id, step_order, channel_name, username,
+               day_offset, minute_of_day, message
+        FROM channel_conversation_steps
+        ORDER BY conversation_id, step_order
+        """,
+    )
+
+    conversations = defaultdict(list)
+    usernames = {user["username"] for user in users}
+    for step in conversation_steps:
+        conversations[step["conversation_id"]].append(step)
+        for mention in MENTION_PATTERN.findall(step["message"]):
+            if mention not in usernames | SPECIAL_MENTIONS | {"admin01"}:
+                raise RuntimeError(f"conversation mentions unknown user: @{mention}")
+    for conversation_id, steps in conversations.items():
+        expected_orders = list(range(1, len(steps) + 1))
+        actual_orders = [step["step_order"] for step in steps]
+        if actual_orders != expected_orders:
+            raise RuntimeError(
+                f"conversation has non-contiguous steps: {conversation_id} {actual_orders}"
+            )
+        if len({step["channel_name"] for step in steps}) != 1:
+            raise RuntimeError(f"conversation spans multiple channels: {conversation_id}")
+        if len({step["username"] for step in steps}) < 2:
+            raise RuntimeError(f"conversation has fewer than two authors: {conversation_id}")
+        timeline = [(step["day_offset"], step["minute_of_day"]) for step in steps]
+        if any(
+            current_day != next_day or current_minute >= next_minute
+            for (current_day, current_minute), (next_day, next_minute)
+            in zip(timeline, timeline[1:])
+        ):
+            raise RuntimeError(f"conversation timestamps are not increasing: {conversation_id}")
+
+    conversation_thread_replies = fetchall_dict(
+        conn,
+        """
+        SELECT conversation_id, root_step_order, reply_order, username,
+               offset_minutes, message
+        FROM channel_conversation_thread_replies
+        ORDER BY conversation_id, root_step_order, reply_order
+        """,
+    )
+    conversation_roots = {
+        (step["conversation_id"], step["step_order"]): step
+        for step in conversation_steps
+    }
+    replies_by_root = defaultdict(list)
+    for reply in conversation_thread_replies:
+        root_key = (reply["conversation_id"], reply["root_step_order"])
+        if root_key not in conversation_roots:
+            raise RuntimeError(f"thread reply references unknown root: {root_key}")
+        if reply["username"] not in usernames:
+            raise RuntimeError(f"thread reply author does not exist: {reply['username']}")
+        for mention in MENTION_PATTERN.findall(reply["message"]):
+            if mention not in usernames | SPECIAL_MENTIONS | {"admin01"}:
+                raise RuntimeError(f"thread reply mentions unknown user: @{mention}")
+        replies_by_root[root_key].append(reply)
+
+    for root_key, replies in replies_by_root.items():
+        expected_orders = list(range(1, len(replies) + 1))
+        actual_orders = [reply["reply_order"] for reply in replies]
+        if actual_orders != expected_orders:
+            raise RuntimeError(f"thread replies are not contiguous: {root_key} {actual_orders}")
+        offsets = [reply["offset_minutes"] for reply in replies]
+        if any(current >= following for current, following in zip(offsets, offsets[1:])):
+            raise RuntimeError(f"thread reply offsets are not increasing: {root_key}")
+        participants = {conversation_roots[root_key]["username"]}
+        participants.update(reply["username"] for reply in replies)
+        if len(participants) < 2:
+            raise RuntimeError(f"thread has fewer than two participants: {root_key}")
+
     for channel in channels:
         category = channel["category"]
         if not message_bank[category]["single"]:
@@ -125,10 +203,21 @@ def load_core_data(conn):
         message_bank,
         weights,
         story_steps,
+        conversation_steps,
+        conversation_thread_replies,
     )
 
 
-def assign_user_channels(users, channels, persona_categories, always_on, min_members, story_steps):
+def assign_user_channels(
+    users,
+    channels,
+    persona_categories,
+    always_on,
+    min_members,
+    story_steps,
+    conversation_steps,
+    conversation_thread_replies,
+):
     category_to_channels = defaultdict(list)
     all_channel_names = []
     for channel in channels:
@@ -153,6 +242,27 @@ def assign_user_channels(users, channels, persona_categories, always_on, min_mem
         if not candidates:
             raise RuntimeError(f"story persona has no users: {step['persona_key']}")
         memberships[candidates[0]].add(step["channel_name"])
+
+    for step in conversation_steps:
+        username = step["username"]
+        if username not in memberships:
+            raise RuntimeError(f"conversation author does not exist: {username}")
+        memberships[username].add(step["channel_name"])
+        for mention in MENTION_PATTERN.findall(step["message"]):
+            if mention in memberships:
+                memberships[mention].add(step["channel_name"])
+
+    conversation_channels = {
+        (step["conversation_id"], step["step_order"]): step["channel_name"]
+        for step in conversation_steps
+    }
+    for reply in conversation_thread_replies:
+        root_key = (reply["conversation_id"], reply["root_step_order"])
+        channel_name = conversation_channels[root_key]
+        memberships[reply["username"]].add(channel_name)
+        for mention in MENTION_PATTERN.findall(reply["message"]):
+            if mention in memberships:
+                memberships[mention].add(channel_name)
 
     channel_members = {name: set() for name in all_channel_names}
     for username, channel_names in memberships.items():
@@ -264,11 +374,35 @@ def build_regular_posts(
     message_bank,
     weights,
     settings,
+    conversation_steps,
     now,
 ):
     user_personas = {user["username"]: user["persona_key"] for user in users}
     now_ms = int(now.timestamp() * 1000) - 60_000
     posts = []
+    local_today = now.astimezone(JST).date()
+    conversation_windows = defaultdict(list)
+    conversations = defaultdict(list)
+    for step in conversation_steps:
+        conversations[step["conversation_id"]].append(step)
+    for steps in conversations.values():
+        first = steps[0]
+        last = steps[-1]
+        first_hour, first_minute = divmod(first["minute_of_day"], 60)
+        last_hour, last_minute = divmod(last["minute_of_day"], 60)
+        start = datetime.combine(
+            local_today - timedelta(days=first["day_offset"]),
+            dt_time(first_hour, first_minute),
+            tzinfo=JST,
+        )
+        end = datetime.combine(
+            local_today - timedelta(days=last["day_offset"]),
+            dt_time(last_hour, last_minute),
+            tzinfo=JST,
+        )
+        conversation_windows[first["channel_name"]].append(
+            (int(start.timestamp() * 1000), int(end.timestamp() * 1000))
+        )
 
     for channel in channels:
         category = channel["category"]
@@ -288,12 +422,19 @@ def build_regular_posts(
             available_authors = [username for username in author_pool if username != previous_author]
             author = random.choice(available_authors or author_pool)
             previous_author = author
-            create_at = sample_recent_timestamp(category, settings, now)
-            for _ in range(20):
-                local_date = datetime.fromtimestamp(create_at / 1000, JST).date()
-                if local_date not in message_dates[message]:
-                    break
+            for _ in range(100):
                 create_at = sample_recent_timestamp(category, settings, now)
+                local_date = datetime.fromtimestamp(create_at / 1000, JST).date()
+                inside_conversation = any(
+                    start <= create_at <= end
+                    for start, end in conversation_windows[channel["name"]]
+                )
+                if not inside_conversation and local_date not in message_dates[message]:
+                    break
+            else:
+                raise RuntimeError(
+                    f"could not place a regular post outside conversation windows: {channel['name']}"
+                )
             message_dates[message].add(datetime.fromtimestamp(create_at / 1000, JST).date())
 
             post = {
@@ -366,6 +507,50 @@ def build_story_posts(team_name, users, channel_members, message_bank, steps, se
     return posts
 
 
+def build_channel_conversation_posts(team_name, steps, thread_replies, now):
+    posts = []
+    local_today = now.astimezone(JST).date()
+    replies_by_root = defaultdict(list)
+    for reply in thread_replies:
+        replies_by_root[(reply["conversation_id"], reply["root_step_order"])].append(reply)
+
+    for step in steps:
+        hour, minute = divmod(step["minute_of_day"], 60)
+        create_at = datetime.combine(
+            local_today - timedelta(days=step["day_offset"]),
+            dt_time(hour, minute),
+            tzinfo=JST,
+        )
+        create_at_ms = int(create_at.timestamp() * 1000)
+        post = {
+            "team": team_name,
+            "channel": step["channel_name"],
+            "user": step["username"],
+            "message": step["message"],
+            "create_at": create_at_ms,
+            "props": {
+                "demo_conversation": step["conversation_id"],
+                "demo_conversation_step": step["step_order"],
+            },
+        }
+        root_key = (step["conversation_id"], step["step_order"])
+        if root_key in replies_by_root:
+            post["replies"] = [
+                {
+                    "user": reply["username"],
+                    "message": reply["message"],
+                    "create_at": create_at_ms + reply["offset_minutes"] * 60_000,
+                    "props": {
+                        "demo_conversation": reply["conversation_id"],
+                        "demo_thread_reply_order": reply["reply_order"],
+                    },
+                }
+                for reply in replies_by_root[root_key]
+            ]
+        posts.append(post)
+    return posts
+
+
 def generate_lines(
     team,
     channels,
@@ -376,6 +561,8 @@ def generate_lines(
     message_bank,
     weights,
     story_steps,
+    conversation_steps,
+    conversation_thread_replies,
     settings,
 ):
     team_name = team["name"]
@@ -434,7 +621,10 @@ def generate_lines(
             }
         )
 
-    now = datetime.now(JST)
+    anchor_ts = settings.get("anchor_ts")
+    if anchor_ts is None:
+        raise RuntimeError("settings.anchor_ts is required for reproducible imports")
+    now = datetime.fromtimestamp(anchor_ts / 1000, JST)
     posts = build_regular_posts(
         team_name,
         channels,
@@ -444,6 +634,7 @@ def generate_lines(
         message_bank,
         weights,
         settings,
+        conversation_steps,
         now,
     )
     posts.extend(
@@ -454,6 +645,14 @@ def generate_lines(
             message_bank,
             story_steps,
             settings,
+            now,
+        )
+    )
+    posts.extend(
+        build_channel_conversation_posts(
+            team_name,
+            conversation_steps,
+            conversation_thread_replies,
             now,
         )
     )
@@ -470,7 +669,9 @@ def validate_lines(lines):
         raise RuntimeError("no posts were generated")
 
     now_ms = int(time.time() * 1000)
-    for post in posts:
+    post_keys = set()
+    conversation_positions = defaultdict(lambda: defaultdict(list))
+    for index, post in enumerate(sorted(posts, key=lambda item: (item["channel"], item["create_at"]))):
         required = {"team", "channel", "user", "message", "create_at", "props"}
         missing = sorted(required - post.keys())
         if missing:
@@ -478,26 +679,47 @@ def validate_lines(lines):
         if post["create_at"] > now_ms:
             raise RuntimeError("generated post has a future timestamp")
 
+        post_key = (post["channel"], post["create_at"])
+        if post_key in post_keys:
+            raise RuntimeError(f"generated posts share a channel timestamp: {post_key}")
+        post_keys.add(post_key)
+
+        conversation_id = post["props"].get("demo_conversation")
+        if conversation_id:
+            conversation_positions[post["channel"]][conversation_id].append(index)
+
         for reaction in post.get("reactions", []):
             if reaction["user"] == post["user"]:
                 raise RuntimeError("generated post has a self-reaction")
         for reply in post.get("replies", []):
-            if reply["user"] == post["user"]:
+            if reply["user"] == post["user"] and "demo_conversation" not in reply["props"]:
                 raise RuntimeError("generated post has a self-reply")
+            if reply["create_at"] <= post["create_at"]:
+                raise RuntimeError("generated reply does not follow its root post")
+            if reply["create_at"] > now_ms:
+                raise RuntimeError("generated reply has a future timestamp")
+
+    for channel_name, conversations in conversation_positions.items():
+        for conversation_id, positions in conversations.items():
+            expected = list(range(positions[0], positions[0] + len(positions)))
+            if positions != expected:
+                raise RuntimeError(
+                    f"conversation is interrupted in {channel_name}: {conversation_id}"
+                )
 
     return posts
 
 
 def write_zip_only(lines):
-    with open(TEMP_JSONL_PATH, "w", encoding="utf-8") as file:
-        for obj in lines:
-            file.write(json.dumps(obj, ensure_ascii=False, separators=(", ", ": ")))
-            file.write("\n")
-
+    payload = "".join(
+        json.dumps(obj, ensure_ascii=False, separators=(", ", ": ")) + "\n"
+        for obj in lines
+    ).encode("utf-8")
+    zip_info = zipfile.ZipInfo("import.jsonl", date_time=(2026, 1, 1, 0, 0, 0))
+    zip_info.compress_type = zipfile.ZIP_DEFLATED
+    zip_info.external_attr = 0o644 << 16
     with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED) as zip_file:
-        zip_file.write(TEMP_JSONL_PATH, arcname="import.jsonl")
-
-    os.remove(TEMP_JSONL_PATH)
+        zip_file.writestr(zip_info, payload)
 
 
 def main():
@@ -520,6 +742,8 @@ def main():
             message_bank,
             weights,
             story_steps,
+            conversation_steps,
+            conversation_thread_replies,
         ) = load_core_data(conn)
 
         memberships, channel_members = assign_user_channels(
@@ -529,6 +753,8 @@ def main():
             always_on,
             settings.get("min_channel_members", 5),
             story_steps,
+            conversation_steps,
+            conversation_thread_replies,
         )
         lines = generate_lines(
             team,
@@ -540,6 +766,8 @@ def main():
             message_bank,
             weights,
             story_steps,
+            conversation_steps,
+            conversation_thread_replies,
             settings,
         )
 
@@ -548,6 +776,12 @@ def main():
 
     message_counts = Counter(post["message"] for post in posts)
     replies = sum(len(post.get("replies", [])) for post in posts)
+    conversations = {
+        post["props"]["demo_conversation"]
+        for post in posts
+        if "demo_conversation" in post["props"]
+    }
+    mention_posts = sum("@" in post["message"] for post in posts)
     print("=" * 60)
     print("Mattermost dummy data generated from SQLite")
     print("=" * 60)
@@ -556,6 +790,8 @@ def main():
     print(f"Channels      : {len(channels)}")
     print(f"Posts         : {len(posts)}")
     print(f"Replies       : {replies}")
+    print(f"Conversations : {len(conversations)}")
+    print(f"Mention roots : {mention_posts}")
     print(f"Unique roots  : {len(message_counts)}")
     print(f"Max duplicate : {max(message_counts.values())}")
     print(f"Import ZIP    : {ZIP_PATH}")
