@@ -17,6 +17,7 @@ from datetime import datetime, time as dt_time, timedelta, timezone
 OUT_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(OUT_DIR, "mm_data.db")
 ZIP_PATH = os.path.join(OUT_DIR, "mattermost_import.zip")
+PROFILE_IMAGE_DIR = os.path.join(OUT_DIR, "profile_images")
 JST = timezone(timedelta(hours=9))
 MENTION_PATTERN = re.compile(r"(?<![\w@])@([A-Za-z0-9_-]+)")
 SPECIAL_MENTIONS = {"all", "channel", "here"}
@@ -641,6 +642,10 @@ def generate_lines(
         )
 
     for user in users:
+        profile_image_name = f"profile-{user['username']}.png"
+        profile_image_path = os.path.join(PROFILE_IMAGE_DIR, profile_image_name)
+        if not os.path.exists(profile_image_path):
+            raise RuntimeError(f"profile image is missing: {profile_image_path}")
         team_roles = "team_admin team_user" if user["roles"].startswith("system_admin") else "team_user"
         lines.append(
             {
@@ -651,6 +656,7 @@ def generate_lines(
                     "nickname": user["nickname"],
                     "first_name": user["first_name"],
                     "last_name": user["last_name"],
+                    "profile_image": profile_image_name,
                     "roles": user["roles"],
                     "teams": [
                         {
@@ -764,7 +770,7 @@ def validate_lines(lines):
     return posts
 
 
-def write_zip_only(lines):
+def write_zip_only(lines, users):
     payload = "".join(
         json.dumps(obj, ensure_ascii=False, separators=(", ", ": ")) + "\n"
         for obj in lines
@@ -774,6 +780,17 @@ def write_zip_only(lines):
     zip_info.external_attr = 0o644 << 16
     with zipfile.ZipFile(ZIP_PATH, "w", zipfile.ZIP_DEFLATED) as zip_file:
         zip_file.writestr(zip_info, payload)
+        for user in users:
+            profile_image_name = f"profile-{user['username']}.png"
+            profile_image_path = os.path.join(PROFILE_IMAGE_DIR, profile_image_name)
+            image_info = zipfile.ZipInfo(
+                f"data/{profile_image_name}",
+                date_time=(2026, 1, 1, 0, 0, 0),
+            )
+            image_info.compress_type = zipfile.ZIP_DEFLATED
+            image_info.external_attr = 0o644 << 16
+            with open(profile_image_path, "rb") as profile_image:
+                zip_file.writestr(image_info, profile_image.read())
 
 
 def main():
@@ -826,7 +843,7 @@ def main():
         )
 
     posts = validate_lines(lines)
-    write_zip_only(lines)
+    write_zip_only(lines, users)
 
     message_counts = Counter(post["message"] for post in posts)
     replies = sum(len(post.get("replies", [])) for post in posts)
